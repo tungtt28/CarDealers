@@ -1,0 +1,55 @@
+﻿@model CarDealers.Areas.Admin.Models.BrandViewModel.UpdateBrandViewModel
+@{
+    ViewBag.Title = "Update Brand";
+}
+<style>
+    .resized-img {
+        width: 100px; /* Set the desired width */
+        height: 100px; /* Set the desired height */
+    }
+</style>
+<div class="content-wrap">
+    <div class="col-lg-12">
+        <div class="card">
+            @using (Html.BeginForm("UpdateBrand", "Brand", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <!-- Hidden field for BrandId -->
+                @Html.HiddenFor(model => model.BrandId)
+
+                <!-- Validation message for BrandName -->
+                <div class="form-group">
+                    @Html.LabelFor(model => model.BrandName)
+                    @Html.TextBoxFor(model => model.BrandName, new { @class = "form-control input-rounded" })
+                    <div style="color: red">
+                        @Html.ValidationMessageFor(model => model.BrandName)
+                    </div>
+                </div>
+
+                <!-- Display the current logo image, if it exists -->
+                <div class="form-group">
+                    @if (Model.LogoImage != null)
+                    {
+                        <label for="currentLogoImage">Current Logo Image</label>
+                        <br />
+                        <img src="@Url.Content("~/" + Model.LogoImage)" alt="Brand Logo" class="resized-img">
+                        <br />
+                    }
+                    @Html.HiddenFor(model => model.LogoImage)
+                </div>
+
+                <!-- Allow the user to upload a new logo image -->
+                <div class="form-group">
+                    @Html.LabelFor(model => model.LogoImage, "Upload New Logo Image")
+                    <input type="file" id="logoImage" name="logoImage" class="form-control-file" />
+                    <div style="color: red">
+                        @Html.ValidationMessageFor(model => model.LogoImage)
+                    </div>
+                </div>
+                <button type="submit" formaction="~/admin/Brand/ListBrand" class="btn btn-danger custom-button">Cancel</button>
+                <button type="submit" class="btn btn-dark">Update Brand</button>
+            }
+        </div>
+    </div>
+</div>

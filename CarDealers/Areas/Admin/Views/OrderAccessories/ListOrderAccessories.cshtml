@@ -1,0 +1,106 @@
+﻿@model IEnumerable<CarDealers.Areas.Admin.Models.OrderAccessoriesViewModel.ListOrderAccessoriesViewModel>
+
+@{
+	ViewBag.Title = "List Order Accessories";
+}
+
+<style>
+	.button-container {
+		display: flex;
+		gap: 10px; /* Adjust the gap to set the space between links */
+		justify-content: center;
+	}
+
+	th, td {
+		text-align: center; /* Equal width for each column */
+	}
+
+	.resized-img {
+		width: 100px; /* Set the desired width */
+		height: 100px; /* Set the desired height */
+	}
+</style>
+
+
+<div class="content-wrap">
+	<!-- Filter Form -->
+	<!-- End Filter Form -->
+	<div class="col-lg-12">
+		<form method="post" action="@Url.Action("DeleteListOrderAccessories", "OrderAccessories", new { area = "admin" })">
+			<div class="card">
+				<div class="table-responsive">
+					<div class="table-wrapper">
+						<div class="table-title">
+							<div class="row">
+								<div class="col-sm-6">
+									<h2>Manage Order Accessories</h2>
+								</div>
+								<div class="col-sm-6">
+									@Html.ActionLink("Create new Order Accessories for Customer", "CreateOrderAccessoriesForCustomer", "OrderAccessories", null, new { @class = "btn btn-dark" })
+									@Html.ActionLink("Create new Order Accessories", "CreateOrderAccessories", "OrderAccessories", null, new { @class = "btn btn-dark" })
+									<input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete selected records?');" />
+								</div>
+							</div>
+						</div>
+
+						<table class="table table-hover">
+							<thead>
+								<tr>
+									<th>
+										<input type="checkbox" id="selectAll"><br><br>
+									</th>
+									<th>Id</th>
+									<th>Customer Name</th>
+									<th>Email</th>
+									<th>Phone</th>
+									<th>Coupon</th>
+									<th>Seller Name</th>
+									<th>Status</th>
+									<th colspan="2" style="text-align: center;">Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								@foreach (var Car in Model)
+								{
+									<tr>
+										<td>
+											<input type="checkbox" name="selectedIds" value="@Car.OrderId" class="checkBox" />
+											@Html.Hidden("OrderIds", Car.OrderId)
+
+										</td>
+										<td>@Car.OrderId</td>
+										<td>@Car.FullName</td>
+										<td>@Car.Email</td>
+										<td>@Car.PhoneNumber</td>
+										<td>@Car.Coupon</td>
+										<td>@Car.SellerName</td>
+										<td>@(Car.Status)</td>
+										<td class="button-td">
+											<div class="button-container">
+												<a href="~/admin/OrderAccessories/UpdateOrderAccessories?id=@Car.OrderId"><input type="button" value="Edit" class="btn btn-dark" /></a>
+												<a href="~/admin/OrderAccessories/Update?id=@Car.OrderId"><input type="button" value="Update" class="btn btn-dark" /></a>
+												<a href="~/admin/OrderAccessories/Detail?id=@Car.OrderId"><input type="button" value="View" class="btn btn-dark" /></a>
+											</div>
+										</td>
+									</tr>
+								}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</form>
+		<script>
+			var selectAllCheckbox = document.getElementById('selectAll');
+			var checkBoxes = document.querySelectorAll('.checkBox');
+
+			selectAllCheckbox.addEventListener('change', function () {
+				for (var i = 0; i < checkBoxes.length; i++) {
+					checkBoxes[i].checked = selectAllCheckbox.checked;
+				}
+			});
+		</script>
+	</div>
+</div>
+
+

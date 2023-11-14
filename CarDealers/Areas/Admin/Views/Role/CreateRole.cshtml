@@ -1,0 +1,26 @@
+﻿@model CarDealers.Entity.UserRole
+@{
+    ViewBag.Title = "Create Role";
+}
+<div class="content-wrap">
+    <div class="col-lg-12">
+        <div class="card">
+            @using (Html.BeginForm("CreateRole", "Role", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.RoleName)
+                    @Html.TextBoxFor(model => model.RoleName, new { @class = "form-control input-rounded" })
+                    <div style="color : red">
+                        @Html.ValidationMessageFor(model => model.RoleName)
+                    </div>
+                </div>
+
+                <!-- Add other form fields as needed -->
+
+                <button type="submit" class="btn btn-primary">Create Role</button>
+            }
+        </div>
+    </div>
+</div>

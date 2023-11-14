@@ -1,0 +1,161 @@
+﻿@model CarDealers.Areas.Admin.Models.OrderCarViewModel.CreateOrderCarGuestViewModel
+@{
+    ViewBag.Title = "Create Order Car Guest";
+}
+<style>
+    .select-sm {
+        height: 100px; /* Adjust the height as needed */
+        /* Add any other styling you want */
+    }
+
+    .form-edit {
+        height: 70px; /* Adjust the height as needed */
+        /* Add any other styling you want */
+    }
+
+    .btn-check {
+        display: inline-block;
+        width: 20px; /* Adjust the size of the tick */
+        height: 20px; /* Adjust the size of the tick */
+        background: url('checkmark.png') center center no-repeat; /* Use your own image for the checked tick */
+        background-size: cover;
+        vertical-align: middle;
+    }
+
+    .btn-text {
+        padding-left: 10px; /* Adjust the spacing between the tick and the text */
+    }
+</style>
+<div class="content-wrap">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <div class="row">
+        <div class="col-lg-12">
+            @using (Html.BeginForm("CreateOrderCarGuest", "OrderCar", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+
+                @Html.AntiForgeryToken()
+                <div class="card">
+                    <div class="row">
+                        <div class="col-lg-6">
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.CarId, "Car")
+                                @Html.DropDownListFor(model => model.CarId, Model.CarList, new { @class = "form-control input-rounded" })
+                                <div style="color: red">
+                                    @Html.ValidationMessageFor(model => model.CarId)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.ColorId, "Color")
+                                @Html.DropDownListFor(model => model.ColorId, Model.ColorList, new { @class = "form-control input-rounded" })
+                                <div style="color: red">
+                                    @Html.ValidationMessageFor(model => model.ColorId)
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.CouponId, "Coupon")
+                                @Html.DropDownListFor(model => model.CouponId, Model.CouponList, new { @class = "form-control input-rounded" })
+                                <div style="color: red">
+                                    @Html.ValidationMessageFor(model => model.CouponId)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.SellerId, "Seller")
+                                @Html.DropDownListFor(model => model.SellerId, Model.SellerList, new { @class = "form-control input-rounded" })
+                                <div style="color: red">
+                                    @Html.ValidationMessageFor(model => model.SellerId)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.FullName)
+                                @Html.TextBoxFor(model => model.FullName, new { @class = "form-control input-rounded" })
+                                <div style="color: red">
+                                    @Html.ValidationMessageFor(model => model.FullName)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.PhoneNumber)
+                                @Html.TextBoxFor(model => model.PhoneNumber, new { @class = "form-control input-rounded" })
+                                <div style="color: red">
+                                    @Html.ValidationMessageFor(model => model.PhoneNumber)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Email)
+                                @Html.TextBoxFor(model => model.Email, new { @class = "form-control input-rounded" })
+                                <div style="color: red">
+                                    @Html.ValidationMessageFor(model => model.Email)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Quantity)
+                                @Html.TextBoxFor(model => model.Quantity, new { @class = "form-control input-rounded", type = "text", id = "quantityInput" })
+                                <div style="color: red">
+                                    @Html.ValidationMessageFor(model => model.Quantity)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.TotalPrice)
+                                @Html.TextBoxFor(model => model.TotalPrice, new { @class = "form-control input-rounded", type = "text", id = "totalPriceInput", @readonly = "readonly" })
+                                <div style="color: red">
+                                    @Html.ValidationMessageFor(model => model.TotalPrice)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Status)
+                                @Html.DropDownListFor(model => model.Status, Model.StatusList, new { @class = "form-control input-rounded", disabled = "disabled"  })
+                                <div style="color : red">
+                                    @Html.ValidationMessageFor(model => model.Status)
+                                </div>
+                            </div>
+
+                            <script>
+                                $(document).ready(function () {
+                                    $("#totalPriceInput, #quantityInput").on('input', function () {
+                                        formatNumberInput(this);
+                                    });
+                                });
+
+                                function formatNumberInput(inputElement) {
+                                    var value = inputElement.value;
+                                    // Remove all characters except numbers and commas
+                                    value = value.replace(/[^0-9,]/g, '');
+                                @* value = value.replace(/^0+/, ''); // Remove leading zeros *@
+                                        value = value.replace(/,/g, ''); // Remove commas
+                                    value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ','); // Add commas for thousands separator
+                                    inputElement.value = value;
+                                }
+                            </script>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-10">
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="row">
+                                <div class="form-group custom-form-group">
+                                    <button type="submit" formaction="~/admin/OrderCar/ListOrderCar" class="btn btn-danger custom-button">Cancel</button>
+                                    <button type="submit" class="btn btn-dark custom-button">Create Order Car</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+

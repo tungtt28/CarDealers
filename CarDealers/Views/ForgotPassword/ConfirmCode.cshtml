@@ -1,0 +1,39 @@
+﻿@{
+    Layout = "_LayoutAccount";
+}
+@{
+    ViewData["Title"] = "Confirm Code";
+}
+
+<body class="img js-fullheight" style="background-image: url(/imagesLogin/bg.jpg);">
+    <section class="ftco-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6 col-lg-4">
+                    <div class="login-wrap p-0">
+                        <h3 class="mb-4 text-center">Confirm Code</h3>
+
+                        @if (TempData["ErrorMessage"] != null)
+                        {
+                            <div class="alert alert-danger">
+                                @TempData["ErrorMessage"]
+                            </div>
+                        }
+
+                        <form asp-action="ConfirmCode" asp-controller="ForgotPassword" method="post" class="signin-form">
+                            <div class="form-group">
+                                <label for="code">Enter Confirmation Code:</label>
+                                <input type="text" class="form-control" id="code" name="otp" required>
+                            </div>
+                            <button type="submit" class="form-control btn btn-primary submit px-3">Verify Code</button>
+                        </form>
+                        <br />
+                        <form asp-action="ResendCode" asp-controller="ForgotPassword" method="post" class="signin-form">
+                            <button type="submit" class="form-control btn btn-primary submit px-3">Resend Code</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>

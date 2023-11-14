@@ -1,0 +1,98 @@
+﻿@model CarDealers.Areas.Admin.Models.CustomerViewModel.CreateCustomerViewModel
+@{
+    ViewBag.Title = "Create Customer";
+}
+<div class="content-wrap">
+    <!-- Include Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <!-- Include Flatpickr JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <div class="col-lg-12">
+        <div class="card">
+            @using (Html.BeginForm("CreateCustomer", "Customer", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.FullName, "Full name")
+                    @Html.TextBoxFor(model => model.FullName, new { @class = "form-control input-rounded" })
+                    <div style="color : red">
+                        @Html.ValidationMessageFor(model => model.FullName)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Email)
+                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control input-rounded" })
+                    <div style="color : red">
+                        @Html.ValidationMessageFor(model => model.Email)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PhoneNumber, "Phone number")
+                    @Html.TextBoxFor(model => model.PhoneNumber, new { @class = "form-control input-rounded" })
+                    <div style="color : red">
+                        @Html.ValidationMessageFor(model => model.PhoneNumber)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Dob, "Date of Birth")
+                    <input type="text" id="Dob" asp-for="Dob" class="form-control input-rounded" name="Dob" value="">
+                    <div style="color: red">
+                        @Html.ValidationMessageFor(model => model.Dob)
+                    </div>
+                </div>
+
+                <script>
+                    flatpickr("#Dob", {
+                        enableTime: false, // Enable time selection
+                        dateFormat: "d-m-Y", // Date and time format
+                        // Additional configuration options go here
+                    });
+                </script>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Gender, "Gender:")
+                    <input type="radio" name="Gender" id="gdm" value="male">
+                    <label style="margin-right: 10px;" for="gdf">Male</label>
+
+                    <input type="radio" name="Gender" id="option2" value="female">
+                    <label for="option2">Female</label>
+
+                    <div style="color : red">
+                        @Html.ValidationMessageFor(model => model.Gender)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Status, "Status:")
+                    <input type="radio" name="Status" id="stt1" value="1">
+                    <label style="margin-right: 10px;" for="option1">Normal</label>
+
+                    <input type="radio" name="Status" id="stt2" value="0">
+                    <label for="option2">Lock</label>
+
+                    <div style="color : red">
+                        @Html.ValidationMessageFor(model => model.Status)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Address)
+                    @Html.TextBoxFor(model => model.Address, new { @class = "form-control input-rounded" })
+                    <div style="color : red">
+                        @Html.ValidationMessageFor(model => model.Address)
+                    </div>
+                </div>
+
+                <!-- Add other form fields as needed -->
+                <button type="submit" formaction="~/admin/Customer/ListCustomer" class="btn btn-danger custom-button">Cancel</button>
+                <button type="submit" name="formaction" value="SaveInformation" class="btn btn-dark">Save information</button>
+                <button type="submit" name="formaction" value="CreateCustomerAccount" class="btn btn-dark">Create Customer Account</button>
+            }
+        </div>
+    </div>
+</div>

@@ -1,0 +1,55 @@
+﻿@model CarDealers.Entity.AutoAccessory
+@{
+    ViewData["Title"] = "Accessories Details";
+}
+@Html.AntiForgeryToken()
+<script>
+    function navigateToHome() {
+        // Thực hiện chuyển hướng đến trang Home
+        window.location.href = '';
+    }
+
+    function navigateToAccessories() {
+        // Thực hiện chuyển hướng đến trang Accessories
+        window.location.href = '';
+    }
+</script>
+<div>
+    <h1 style="color: red; font-size: 35px;text-align: center;margin-top: 35px">@Html.Raw(Model.AccessoryName)</h1>
+    <br />
+    <dd style="margin-left: 20%;">
+        <a href="/Home">Home </a>/
+        <a href="/AccessoriesPage/Accessories">Accessories</a>
+    </dd>
+    <br />
+    <br />
+    <br />
+    <dd style="margin-left: 20%;">
+        <input type="number" id="NumberAccessoriesOrder" name="NumberAccessoriesOrder" min="1">
+        <a href="" class="card-title" style="background-color: white;font-size:20px;">Add to cart</a>
+    </dd>
+    <br />
+    <br />
+    <br />
+    <br />
+    <dl class="row">
+        <dd style="margin-left: 20%;">@Html.Raw(Model.Description)</dd>
+    </dl>
+    <hr>
+    <h2 style="margin-left:10rem;margin-top:1rem;margin-bottom:1rem">Top accessories</h2>
+    <div class="container">
+        <div class="row">
+            @foreach (var item in @ViewBag.TopAccessories)
+            {
+                <div style=" display: flex; flex-direction: row;" class="col-sm-4">
+                    <a href="~/AccessoriesPage/ViewDetails?id=@item.AccessoryId" class="card-title" style="background-color: white;font-size:20px;">
+                    <img style="max-height: 100px; max-width: 100px;" src="@Url.Content("~/"+item.Image)">
+                    </a>
+                    <a onmouseover="changeColor(this)" onmouseout="changeColor1(this)" href="~/AccessoriesPage/ViewDetails?id=@item.AccessoryId" class="card-title" style="background-color: white;font-size:15px;margin-left:8px;color:black">@item.AccessoryName</a>
+                </div>
+            }
+        </div>
+    </div>
+    <a style="float:right;margin-right:50px;margin-top:23px;margin-bottom:10px" href="~/AccessoriesPage/Accessories" class="btn btn-dark">Back To List Accessories</a>
+    <hr style=" margin-bottom:50px">
+</div>

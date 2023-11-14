@@ -1,0 +1,103 @@
+﻿@model IEnumerable<CarDealers.Models.CarPageModel.CarViewModel>
+
+@{
+    ViewData["Title"] = "Cars";
+}
+
+<section class="car_section layout_padding">
+    <!-- find section -->
+
+    <section class="find_section layout_padding2">
+        <div class="container">
+            <form method="post" action="@Url.Action("ListCar", "CarPage")">
+                <div>
+                    <h5>
+                        Find Your car
+                    </h5>
+                </div>
+                <div class=" form-row">
+                    <div class="col-sm-12">
+                        <input type="text" class="form-control" id="Keyword" name="Keyword" value="@ViewBag.Keyword" placeholder="Keyword">
+                    </div>
+                    <div class="col-sm-3">
+                        @Html.DropDownList("brandFilter", (IEnumerable<SelectListItem>)ViewBag.BrandOptions, "Brand", new { @class = "form-control" })
+                    </div>
+                    <div class="col-sm-3">
+                        @Html.DropDownList("carTypeFilter", (IEnumerable<SelectListItem>)ViewBag.CarTypeOptions, "Car Type", new { @class = "form-control" })
+                    </div>
+                    <div class="col-sm-3">
+                        @Html.DropDownList("engineFilter", (IEnumerable<SelectListItem>)ViewBag.EngineType, "Engine Type", new { @class = "form-control" })
+                    </div>
+                    <div class="col-sm-3">
+                        @Html.DropDownList("fuelFilter", (IEnumerable<SelectListItem>)ViewBag.FuelType, "Fuel Type", new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="d-flex justify-content-center justify-content-sm-end">
+                    <button type="submit" class="">
+                        Search
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+    <div class="container">
+        <div class="heading_container">
+            <h2>
+                Our Cars
+            </h2>
+            <hr>
+        </div>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+
+            @foreach (var item in Model)
+            {
+                <div class="col">
+
+                    <div class="card h-100">
+                        <img src="@Url.Content("~/"+item.Image)" class="card-img-top" alt="..." style="height: 190px;object-fit: contain;">
+                        <div class="card-body">
+                            <h5 class="card-title">@item.CarName</h5>
+                            <p class="card-text">Giá từ: @item.ExportPrice VND</p>
+                            <div class="d-flex justify-content-center">
+                                <a href="~/CarPage/CarDetails?id=@item.CarId" class="see_more-btn">
+                                    Chi tiết
+                                </a>
+                                <a href="~/CarPage/CreateOrder?id=@item.CarId" class="see_more-btn">
+                                    Đặt xe
+                                </a>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="d-flex justify-content-center" style="margin-top:50px; background-color: white;font-size:13px">
+        <nav aria-label="Page navigation text-center">
+            <ul class="pagination">
+                @if (ViewBag.PageNumber > 1)
+                {
+                    <li class="page-item">
+                        <a href="ListCar?page=1" class="page-link">&lt&lt</a>
+                    </li>
+                }
+
+                @for (int i = 1; i <= Math.Ceiling((decimal)ViewBag.TotalRecords / ViewBag.PageSize); i++)
+                {
+                    <li class="page-item @(ViewBag.PageNumber == i ? "active" : "")">
+                        <a href="ListCar?page=@i" class="page-link">@i</a>
+                    </li>
+                }
+
+                @if (ViewBag.PageNumber < Math.Ceiling((decimal)ViewBag.TotalRecords / ViewBag.PageSize))
+                {
+                    <li class="page-item">
+                        <a href="ListCar?page=@Math.Ceiling((decimal)ViewBag.TotalRecords / ViewBag.PageSize)" class="page-link">>></a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    </div>
+</section>

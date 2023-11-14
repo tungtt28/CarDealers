@@ -1,0 +1,47 @@
+﻿@using CarDealers.Entity
+@model List<CarDealers.Entity.Order>
+@addTagHelper *,Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "_Layout";
+}
+@{
+    ViewData["Title"] = "Your Car";
+}
+<div style="background-color:lightgray">
+    <h1 style="text-align: center;max-width: 60%;margin-left: auto;margin-right: auto; background-color:white">
+        Your Car
+    </h1>
+    @if (Model.Count == 0)
+    {
+        <div class="text-notification" style="display: flex;justify-content: center;text-align: center;max-width: 60%;margin-left: auto;margin-right: auto; background-color:white">
+            <p style="margin-right: 10px;">Do not have car information. </p>
+            <a href="/CarPage/Index">Buy now?</a>
+        </div>
+
+        <div style="display: flex;justify-content: center;">
+            <img src="~/images/NoVehicle.jpg" style="max-width:60%">
+        </div>
+    }
+    @foreach (Order o in Model)
+    {
+        foreach (OrderDetail orderDetail in o.OrderDetails)
+        {
+            <div class="container mt-5 mb-5">
+                <div class="d-flex justify-content-center row">
+                    <div class="col-md-10">
+                        <div class="row p-2 bg-white border rounded">
+                            <div class="col-md-3 mt-1"><img class="img-fluid img-responsive rounded product-image" src="/@orderDetail.Car.Image"></div>
+                            <div class="col-md-6 mt-1">
+                                <h3>Car Model: @orderDetail.Car.Model</h3>
+                                <p class="text-justify text-truncate para mb-0">Brand: @orderDetail.Car.Brand.BrandName<br><br></p>
+                                <p class="text-justify text-truncate para mb-0">Fuel Type: @orderDetail.Car.FuelType.FuelTypeName<br><br></p>
+                                <p class="text-justify text-truncate para mb-0">Car Type: @orderDetail.Car.CarType.TypeName<br><br></p>
+                                <p class="text-justify text-truncate para mb-0">Engine Type: @orderDetail.Car.EngineType.EngineTypeName<br><br></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>

@@ -1,0 +1,153 @@
+﻿@model IEnumerable<CarDealers.Models.AccessoriesPageViewModel.ListAccessoriesPageViewModel>
+@{
+	ViewData["Title"] = "Accessories";
+}
+<section class="car_section layout_padding">
+    <section class="find_section layout_padding2">
+        <div class="container">
+            <form method="post" action="@Url.Action("SearchAccessories", "AccessoriesPage")">
+                <div>
+                    <h5>
+                        Find Your Accessories
+                    </h5>
+                </div>
+                <div class=" form-row">
+                    <div class="col-sm-12">
+                        <input type="text" class="form-control" id="Keyword" name="Keyword" value="@ViewBag.Keyword" placeholder="Keyword">
+                    </div>
+                </div>
+                <div class="d-flex justify-content-center justify-content-sm-end">
+                    <button type="submit" class="">
+                        Search
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+    <div class="container">
+        <div class="heading_container">
+            <h2>
+                Our Accessories
+            </h2>
+            <hr>
+        </div>
+        @* <br />        
+        <form method="post" action="@Url.Action("SearchAccessories", "AccessoriesPage")">
+            <div class="filter-form">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="search-form">
+                            <div class="form-group">
+                                <label for="Keyword">Search:</label>
+                                <input type="text" class="form-control" id="Keyword" name="Keyword" value="@ViewBag.Keyword">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <button style="float:right" type="submit" class="btn btn-dark">Search</button>
+                    </div>
+                </div>
+            </div>
+        </form> *@
+        <hr>
+	<div class="container">
+		<div class="heading_container">
+			<h2>
+				Our Accessories
+			</h2>
+			<hr>
+		</div>
+		<br />
+		<form method="post" action="@Url.Action("SearchAccessories", "AccessoriesPage")">
+			<div class="filter-form">
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="search-form">
+							<div class="form-group">
+								<label for="Keyword">Search:</label>
+								<input type="text" class="form-control" id="Keyword" name="Keyword" value="@ViewBag.Keyword">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<button style="float:right" type="submit" class="btn btn-dark">Search</button>
+					</div>
+				</div>
+			</div>
+		</form>
+		<hr>
+
+		<div class="container">
+			<div class="row">
+				@foreach (var accessories in Model)
+				{
+					<div class="col-md-4" style="margin-top : 30px; display: flex; flex-direction: column; align-items: flex-start;">
+						<a href="~/AccessoriesPage/ViewDetails?id=@accessories.AccessoryId" class="card-title" style="background-color: white;font-size:20px;">
+							<div class="img-box">
+								@if (accessories.Image != null)
+								{
+									<img src="@Url.Content("~/"+accessories.Image)" alt="Accessories Image" class="resized-img" width="400" height="350">
+								}
+							</div>
+							<div class="detail-box" style="margin-top: auto;">
+								<div class="name">
+									<h4>
+										<a href="~/AccessoriesPage/ViewDetails?id=@accessories.AccessoryId" class="card-title" style="background-color: white;font-size:20px;">@accessories.AccessoryName</a>
+									</h4>
+								</div>
+								@*<div class="price">
+							<h4 >
+							@accessories.ExportPrice VND
+							</h4>
+							<h4 >
+							<a href="~/Cart/addProduct?id=@accessories.AccessoryId"><input type="submit" value="Add to cart" class="btn btn-dark" /></a>
+
+							</h4>
+							</div>*@
+								<div class="card-footer">
+									<span class="text-muted">@accessories.ExportPrice VND</span>
+									<a asp-route="addcart"
+								   asp-route-productid="@accessories.AccessoryId"
+								   class="btn btn-secondary btn-sm float-right">Add to cart</a>
+								</div>
+							</div>
+						</a>
+					</div>
+				}
+			</div>
+		</div>
+		<div class="d-flex justify-content-center" style="margin-top:50px; background-color:black;font-size:13px">
+			<nav aria-label="Page navigation text-center">
+				<ul class="pagination">
+					@if (ViewBag.PageNumber > 1)
+					{
+						<li class="page-item">
+							<a href="Accessories?page=1" class="page-link">&lt&lt</a>
+						</li>
+					}
+
+					@for (int i = 1; i <= Math.Ceiling((decimal)ViewBag.TotalRecords / ViewBag.PageSize); i++)
+					{
+						<li class="page-item @(ViewBag.PageNumber == i ? "active" : "")">
+							<a href="Accessories?page=@i" class="page-link">@i</a>
+						</li>
+					}
+
+					@if (ViewBag.PageNumber < Math.Ceiling((decimal)ViewBag.TotalRecords / ViewBag.PageSize))
+					{
+						<li class="page-item">
+							<a href="Accessories?page=@Math.Ceiling((decimal)ViewBag.TotalRecords / ViewBag.PageSize)" class="page-link">>></a>
+						</li>
+					}
+				</ul>
+			</nav>
+		</div>
+	</div>
+</section>
+
+<!-- end car section -->
+<!-- info section -->

@@ -1,0 +1,135 @@
+﻿@model CarDealers.Areas.Admin.Models.OrderAccessoriesViewModel.CreateOrderAccessoriesViewModel
+@{
+	ViewBag.Title = "Thanh toán";
+	decimal total = 0;
+}
+
+<style>
+	.select-sm {
+		height: 100px; /* Adjust the height as needed */
+		/* Add any other styling you want */
+	}
+
+	.form-edit {
+		height: 70px; /* Adjust the height as needed */
+		/* Add any other styling you want */
+	}
+
+	.btn-check {
+		display: inline-block;
+		width: 20px; /* Adjust the size of the tick */
+		height: 20px; /* Adjust the size of the tick */
+		background: url('checkmark.png') center center no-repeat; /* Use your own image for the checked tick */
+		background-size: cover;
+		vertical-align: middle;
+	}
+
+	.btn-text {
+		padding-left: 10px; /* Adjust the spacing between the tick and the text */
+	}
+</style>
+<div class="container" style="padding-bottom:20px">
+	<nav style="margin-top: 1.786em; margin-bottom: 1.6em">
+		<a href="/home/index">Trang chủ</a>
+		<span class="delimiter">
+			<i class="fa fa-angle-right"></i>
+		</span>
+		Đã chọn mua
+	</nav>
+	<header class="entry-header" style="text-align: center; margin-bottom: 2.857em;">
+		<h1 class="entry-title" style="font-size: 2.857em; letter-spacing: -.025em; margin-bottom:0;">Thanh toán</h1>
+	</header>
+
+	<div class="container">
+		<h3>Thông tin thanh toán</h3>
+		<div class="content-wrap">
+			<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+			<div class="row">
+				<div class="col-lg-12">
+					@using (Html.BeginForm("CreateOrderAccessories", "OrderAccessories", FormMethod.Post, new { enctype = "multipart/form-data" }))
+					{
+
+						@Html.AntiForgeryToken()
+						<div class="card" style="padding:20px">
+							<div class="row">
+								<div class="col-lg-6">
+									<div class="form-group">
+										@Html.LabelFor(model => model.FullName)
+										@Html.TextBoxFor(model => model.FullName, new { @class = "form-control input-rounded" })
+										<div style="color: red">
+											@Html.ValidationMessageFor(model => model.FullName)
+										</div>
+									</div>
+
+									<div class="form-group">
+										@Html.LabelFor(model => model.Address)
+										@Html.TextBoxFor(model => model.Address, new { @class = "form-control input-rounded" })
+										<div style="color: red">
+											@Html.ValidationMessageFor(model => model.Address)
+										</div>
+									</div>
+
+									<div class="form-group">
+										@Html.LabelFor(model => model.PhoneNumber)
+										@Html.TextBoxFor(model => model.PhoneNumber, new { @class = "form-control input-rounded" })
+										<div style="color: red">
+											@Html.ValidationMessageFor(model => model.PhoneNumber)
+										</div>
+									</div>
+
+									<div class="form-group">
+										@Html.LabelFor(model => model.Email)
+										@Html.TextBoxFor(model => model.Email, new { @class = "form-control input-rounded" })
+										<div style="color: red">
+											@Html.ValidationMessageFor(model => model.Email)
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-6">
+									<h3>Đơn hàng của bạn</h3>
+
+									
+									<table class="table">
+										<tr>
+											<th>Sản phẩm</th>
+											<th>Tạm tính</th>
+										</tr>
+										
+										@foreach (var cartitem in Model.Details)
+										{
+											var thanhtien = cartitem.quantity * cartitem.accessory.ExportPrice ?? 0;
+											
+											total += thanhtien;
+											<tr>
+												<td>@cartitem.accessory.AccessoryName x @cartitem.quantity</td>
+												<td>@(thanhtien.ToString("n0")) VNĐ</td>
+											</tr>
+											
+										}
+
+										<tr>
+											<th>Tổng</th>
+											<td>@(total.ToString("n0")) VNĐ</td>
+										</tr>
+										
+									</table>
+									<div class="row">
+										<div class="col-lg-10">
+											<button type="submit" class="btn btn-dark custom-button">Đặt hàng</button>
+										</div>
+									</div>
+								</div>
+
+							</div>
+
+							
+						</div>
+					}
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+</div>
+

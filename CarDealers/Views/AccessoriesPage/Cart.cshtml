@@ -1,0 +1,107 @@
+﻿@model List<CarDealers.Entity.CartItem>
+
+<div class="container">
+	<nav style="margin-top: 1.786em; margin-bottom: 1.6em">
+		<a href="/home/index">Trang chủ</a>
+		<span class="delimiter">
+			<i class="fa fa-angle-right"></i>
+		</span>
+		Đã chọn mua
+	</nav>
+	<header class="entry-header" style="text-align: center; margin-bottom: 2.857em;">
+		<h1 class="entry-title" style="font-size: 2.857em; letter-spacing: -.025em; margin-bottom:0;">Đã chọn mua</h1>
+	</header>
+
+	@if (Model.Count > 0)
+	{
+		decimal total = 0;
+		int stt = 1;
+
+		<table class="table">
+			<tr>
+				<th>#</th>
+				<th>Sản phẩm</th>
+				<th>Giá</th>
+				<th>Số lượng</th>
+				<th>Thành tiền</th>
+				<th></th>
+			</tr>
+			@foreach (var cartitem in Model)
+			{
+				var thanhtien = cartitem.quantity * cartitem.accessory.ExportPrice ?? 0;
+
+				total += thanhtien;
+
+				<tr>
+					<td>@(stt++)</td>
+					<td>@cartitem.accessory.AccessoryName</td>
+					<td>@(cartitem.accessory.ExportPrice?.ToString("n0")) VNĐ</td>
+					<td><input asp-for="@cartitem.quantity" id="@($"quantity-{cartitem.accessory.AccessoryId}")" /></td>
+					<td>@(thanhtien.ToString("n0")) VNĐ</td>
+					<td>
+						<button class="btn btn-success updatecartitem"
+						data-productid="@cartitem.accessory.AccessoryId">
+							Cập nhật
+						</button>
+						<a asp-route="removecart" asp-route-productid="@cartitem.accessory.AccessoryId"
+				   class="btn btn-danger">Xóa</a>
+					</td>
+				</tr>
+			}
+			<tr>
+				<td colspan="4" class="text-right">Tổng tiền</td>
+				<td>@(total.ToString("n0")) VNĐ</td>
+				<td></td>
+			</tr>
+		</table>
+
+		<a asp-controller="OrderAccessories" asp-action="CreateOrderAccessories" class="btn btn-success">Tiến hành thanh toán</a>
+
+		@section Scripts {
+		<script>
+			$(document).ready(function () {
+				$(".updatecartitem").click(function (event) {
+					event.preventDefault();
+					var productid = $(this).attr("data-productid");
+					var quantity = $("#quantity-" + productid).val();
+					$.ajax({
+						type: "POST",
+						url: "@Url.RouteUrl("updatecart")",
+						data: {
+							productid: productid,
+							quantity: quantity
+						},
+						success: function (result) {
+							window.location.href = "@Url.RouteUrl("cart")";
+						}
+					});
+				});
+			});
+		</script>
+	}
+
+	}
+	else
+	{
+		<div class="wocommerce">
+			<div class="wocommerce-notice-wrapper"></div>
+			<div style="margin:0 20px">
+				<p class="cart-empty wocommerce-info" style="padding:50px 80px;background-color:#0f3057; text-align:center;font-size:16px;color:white">Chưa có sản phẩm nào trong giỏ hàng.</p>
+			</div>
+
+			<p class="return-to-shop" style="text-align:center;margin-bottom:7em;">
+				<a class="button wc-backward wp-element-button" href="/AccessoriesPage/Accessories" style="font-size: .875rem;
+    border-radius: 1.571em;
+    padding: 1.036em 2.134em;
+    border-width: 0;
+    display: inline-block;
+    color: #333e48;
+    background-color: #efecec;
+    border-color: #efecec;
+    transition: all .2s ease-in-out;">Quay trở lại cửa hàng</a>
+			</p>
+		</div>
+
+	}
+</div>
+

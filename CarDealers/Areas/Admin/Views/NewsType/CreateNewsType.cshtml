@@ -1,0 +1,28 @@
+﻿@model CarDealers.Entity.NewsType
+@{
+    ViewBag.Title = "Create News Type";
+}
+
+<div class="content-wrap">
+    <div class="col-lg-12">
+        <div class="card">
+            @using (Html.BeginForm("CreateNewsType", "NewsType", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.NewsTypeName)
+                    @Html.TextBoxFor(model => model.NewsTypeName, new { @class = "form-control input-rounded" })
+                    <div style="color : red">
+                        @Html.ValidationMessageFor(model => model.NewsTypeName)
+                    </div>
+                </div>
+
+                <!-- Add other form fields as needed -->
+
+                <button type="submit" class="btn btn-dark">Create News Type</button>
+            }
+        </div>
+        <a style="float:right;" class="btn btn-dark" href="~/admin/NewsType/ListNewsType">Back to list</a>
+    </div>
+</div>

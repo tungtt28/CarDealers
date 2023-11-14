@@ -1,0 +1,26 @@
+﻿@model CarDealers.Entity.Color
+@{
+    ViewBag.Title = "Create Color";
+}
+<div class="content-wrap">
+    <div class="col-lg-12">
+        <div class="card">
+            @using (Html.BeginForm("CreateColor", "Color", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ColorName)
+                    @Html.TextBoxFor(model => model.ColorName, new { @class = "form-control input-rounded" })
+                    <div style="color : red">
+                    @Html.ValidationMessageFor(model => model.ColorName)
+                    </div>
+                </div>
+
+                <!-- Add other form fields as needed -->
+
+                <button type="submit" class="btn btn-dark">Create Color</button>
+            }
+        </div>
+    </div>
+</div>

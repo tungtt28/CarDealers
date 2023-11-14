@@ -1,0 +1,238 @@
+﻿@model CarDealers.Areas.Admin.Models.CarViewModel.CreateCarViewModel
+@{
+    ViewBag.Title = "Create Car";
+}
+<style>
+    .select-sm {
+        height: 100px; /* Adjust the height as needed */
+        /* Add any other styling you want */
+    }
+
+    .form-edit {
+        height: 70px; /* Adjust the height as needed */
+        /* Add any other styling you want */
+    }
+    .btn-check {
+        display: inline-block;
+        width: 20px; /* Adjust the size of the tick */
+        height: 20px; /* Adjust the size of the tick */
+        background: url('checkmark.png') center center no-repeat; /* Use your own image for the checked tick */
+        background-size: cover;
+        vertical-align: middle;
+    }
+
+    .btn-text {
+        padding-left: 10px; /* Adjust the spacing between the tick and the text */
+    }
+</style>
+<div class="content-wrap">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <div class="row">
+        <div class="col-lg-12">
+            @using (Html.BeginForm("CreateCar", "Car", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+
+                @Html.AntiForgeryToken()
+                <div class="card">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Model)
+                                @Html.TextBoxFor(model => model.Model, new { @class = "form-control input-rounded" })
+                                <div style="color: red">
+                                    @Html.ValidationMessageFor(model => model.Model)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Quantity)
+                                @Html.TextBoxFor(model => model.Quantity, new { @class = "form-control input-rounded", type = "text", id = "quantityInput" })
+                                <div style="color: red">
+                                    @Html.ValidationMessageFor(model => model.Quantity)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Year)
+                                @Html.DropDownListFor(model => model.Year, Enumerable.Range(2000, DateTime.Now.Year - 2000 + 1)
+                            .OrderByDescending(i => i)
+                            .Select(i => new SelectListItem
+                            {
+                            Text = i.ToString(),
+                            Value = i.ToString()
+                            }), "", new { @class = "form-control input-rounded" })
+                                <div style="color: red">
+                                    @Html.ValidationMessageFor(model => model.Year)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.ImportPrice)
+                                @Html.TextBoxFor(model => model.ImportPrice, new { @class = "form-control input-rounded", type = "text", id = "importPriceInput" })
+                                <div style="color: red">
+                                    @Html.ValidationMessageFor(model => model.ImportPrice)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.ExportPrice)
+                                @Html.TextBoxFor(model => model.ExportPrice, new { @class = "form-control input-rounded", type = "text", id = "exportPriceInput" })
+                                <div style="color: red">
+                                    @Html.ValidationMessageFor(model => model.ExportPrice)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.DepositPrice)
+                                @Html.TextBoxFor(model => model.DepositPrice, new { @class = "form-control input-rounded", type = "text", id = "depositPriceInput" })
+                                <div style="color: red">
+                                    @Html.ValidationMessageFor(model => model.DepositPrice)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Tax)
+                                @Html.TextBoxFor(model => model.Tax, new { @class = "form-control input-rounded", type = "text", id = "taxInput" })
+                                <div style="color: red">
+                                    @Html.ValidationMessageFor(model => model.Tax)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Kilometerage">Kilometerage</label>
+                                @Html.TextBoxFor(model => model.Mileage, new { @class = "form-control input-rounded", type = "text", id = "mileageInput" })
+                                <div style="color: red">
+                                    @Html.ValidationMessageFor(model => model.Mileage)
+                                </div>
+                            </div>
+
+                            <script>
+                                $(document).ready(function () {
+                                    $("#exportPriceInput, #depositPriceInput, #taxInput, #importPriceInput, #quantityInput, #mileageInput").on('input', function () {
+                                        formatNumberInput(this);
+                                    });
+                                });
+
+                                function formatNumberInput(inputElement) {
+                                    var value = inputElement.value;
+                                    // Remove all characters except numbers and commas
+                                    value = value.replace(/[^0-9,]/g, '');
+                                    // If the value is not '0' alone, remove leading zeros
+                                    if (value !== '0') {
+                                        value = value.replace(/^0+/, ''); // Remove leading zeros
+                                    }
+                                    value = value.replace(/,/g, ''); // Remove commas
+                                    value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ','); // Add commas for thousands separator
+                                    inputElement.value = value;
+                                }
+                            </script>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Transmission)
+                                @Html.TextBoxFor(model => model.Transmission, new { @class = "form-control input-rounded" })
+                                <div style="color: red">
+                                    @Html.ValidationMessageFor(model => model.Transmission)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Status)
+                                <input type="radio" name="Status" id="option1" value="0" @(Model.Status == 0 ? "checked" : "")>
+                                <label style="margin-right: 10px;" for="option1">Active</label>
+
+                                <input type="radio" name="Status" id="option2" value="1" @(Model.Status == 1 ? "checked" : "")>
+                                <label for="option2">Inactive</label>
+
+                                <div style="color : red">
+                                    @Html.ValidationMessageFor(model => model.Status)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.BrandId, "Brand")
+                                @Html.DropDownListFor(model => model.BrandId, Model.BrandList, new { @class = "form-control input-rounded" })
+                                <div style="color: red">
+                                    @Html.ValidationMessageFor(model => model.BrandId)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.EngineTypeId, "Engine")
+                                @Html.DropDownListFor(model => model.EngineTypeId, Model.EngineTypeList, new { @class = "form-control input-rounded" })
+                                <div style="color: red">
+                                    @Html.ValidationMessageFor(model => model.EngineTypeId)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.FuelTypeId, "FuelType")
+                                @Html.DropDownListFor(model => model.FuelTypeId, Model.FuelTypeList, new { @class = "form-control input-rounded" })
+                                <div style="color: red">
+                                    @Html.ValidationMessageFor(model => model.FuelTypeId)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.CarTypeId, "CarType")
+                                @Html.DropDownListFor(model => model.CarTypeId, Model.CarTypeList, new { @class = "form-control input-rounded" })
+                                <div style="color: red">
+                                    @Html.ValidationMessageFor(model => model.CarTypeId)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.ListBoxFor(model => model.SelectedColors, new MultiSelectList(Model.Colors, "Value", "Text") , new { @class = "form-control select-sm"})
+                                @Html.ValidationMessageFor(model => model.SelectedColors, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Description)
+                                @Html.TextBoxFor(model => model.Description, new { @class = "form-control input-rounded form-edit" })
+                                <div style="color: red">
+                                    @Html.ValidationMessageFor(model => model.Description)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Image, "Upload Image")
+                                <input type="file" id="Image" name="Image" class="form-control-file" />
+                                <div style="color: red">
+                                    @Html.ValidationMessageFor(model => model.Image)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Content)
+                            <br>
+
+                            <!-- Trường văn bản cho CKEditor -->
+                            @Html.TextAreaFor(model => model.Content, new { @id = "editor" })
+
+                            <script>
+                                CKEDITOR.config.language = 'vi';
+                                CKEDITOR.config.contentsLangDirection = 'vi';
+                                CKEDITOR.replace("editor");
+                            </script>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-10">
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="row">
+                                <div class="form-group custom-form-group">
+                                    <button type="submit" formaction="~/admin/Car/ListCar" class="btn btn-danger custom-button">Cancel</button>
+                                    <button type="submit" class="btn btn-dark custom-button">Create Car</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

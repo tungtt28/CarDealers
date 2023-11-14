@@ -1,0 +1,58 @@
+﻿@model IEnumerable<CarDealers.Entity.UserRole>
+@{
+    ViewBag.Title = "List Role";
+}
+
+<style>
+    .button-container {
+        display: flex;
+        gap: 0; /* Remove space between buttons */
+        justify-content: center;
+    }
+
+    th, td {
+        text-align: center; /* Equal width for each column */
+    }
+</style>
+
+
+<div class="content-wrap">
+
+    <div class="col-lg-12">
+            <div class="card">
+
+            <div class="table-responsive">
+                <div class="table-wrapper">
+                    <div class="table-title">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <h2>Role List</h2>
+                            </div>
+                        </div>
+                    </div>
+
+                        <table class="table student-data-table m-t-20 table table-hover ">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var userRole in Model)
+                                {
+                                    <tr>
+                                        <td>@userRole.UserRoleId</td>
+                                        <td>@userRole.RoleName</td>
+                                        <td class="button-td">
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

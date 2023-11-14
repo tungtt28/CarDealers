@@ -1,0 +1,26 @@
+﻿@model CarDealers.Entity.CarType
+@{
+    ViewBag.Title = "Create Car Type";
+}
+<div class="content-wrap">
+    <div class="col-lg-12">
+        <div class="card">
+            @using (Html.BeginForm("CreateCarType", "CarType", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TypeName)
+                    @Html.TextBoxFor(model => model.TypeName, new { @class = "form-control input-rounded" })
+                    <div style="color : red">
+                        @Html.ValidationMessageFor(model => model.TypeName)
+                    </div>
+                </div>
+
+                <!-- Add other form fields as needed -->
+
+                <button type="submit" class="btn btn-dark">Create Car Type</button>
+            }
+        </div>
+    </div>
+</div>

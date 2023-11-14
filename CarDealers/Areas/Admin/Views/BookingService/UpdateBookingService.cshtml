@@ -1,0 +1,246 @@
+﻿@model CarDealers.Areas.Admin.Models.BookingServiceModel.UpdateBookingServiceViewModel
+@{
+    ViewBag.Title = "Update Booking Service";
+}
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<style>
+    .select-sm {
+        height: 100px; /* Adjust the height as needed */
+        /* Add any other styling you want */
+    }
+
+    .form-edit {
+        height: 70px; /* Adjust the height as needed */
+        /* Add any other styling you want */
+    }
+
+    .btn-check {
+        display: inline-block;
+        width: 20px; /* Adjust the size of the tick */
+        height: 20px; /* Adjust the size of the tick */
+        background: url('checkmark.png') center center no-repeat; /* Use your own image for the checked tick */
+        background-size: cover;
+        vertical-align: middle;
+    }
+
+    /* Style for the custom checkbox container */
+    .custom-checkbox-label {
+        display: block;
+        position: relative;
+        padding-left: 30px; /* Space for the custom checkbox */
+        cursor: pointer;
+        user-select: none;
+        margin-bottom: 10px; /* Add spacing between checkboxes */
+    }
+
+    /* Hide the default checkbox */
+    .custom-checkbox {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    /* Custom checkbox design */
+    .checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 24px;
+        width: 24px;
+        background-color: #fff; /* Background color when unchecked */
+        border: 2px solid #000; /* Border color */
+        border-radius: 5px;
+        transition: background-color 0.3s, border 0.3s;
+    }
+
+    /* Style the custom checkbox when checked */
+    .custom-checkbox:checked + .checkmark {
+        background-color: #000; /* Background color when checked */
+        border-color: #000; /* Border color when checked */
+    }
+
+    /* Custom checkmark (the tick) */
+    .checkmark::after {
+        content: "\2713"; /* Checkmark character */
+        font-size: 16px;
+        color: #fff; /* Checkmark color */
+        display: none;
+    }
+
+    /* Show the checkmark when the checkbox is checked */
+    .custom-checkbox:checked + .checkmark::after {
+        display: block;
+    }
+</style>
+<div class="content-wrap">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Include Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <!-- Include Flatpickr JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <div class="row">
+        <div class="col-lg-12">
+            @using (Html.BeginForm("UpdateBookingService", "BookingService", FormMethod.Post))
+            {
+
+                @Html.AntiForgeryToken()
+                <!-- Hidden field for BrandId -->
+                @Html.HiddenFor(model => model.BookingId)
+                <div class="card">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.FullName)
+                                @Html.TextBoxFor(model => model.FullName, new { @class = "form-control input-rounded" })
+                                <div style="color: red">
+                                    @Html.ValidationMessageFor(model => model.FullName)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.PhoneNumber)
+                                @Html.TextBoxFor(model => model.PhoneNumber, new { @class = "form-control input-rounded" })
+                                <div style="color: red">
+                                    @Html.ValidationMessageFor(model => model.PhoneNumber)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Email)
+                                @Html.TextBoxFor(model => model.Email, new { @class = "form-control input-rounded" })
+                                <div style="color: red">
+                                    @Html.ValidationMessageFor(model => model.Email)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.Label("Service Type")
+                                @foreach (var serviceType in ViewBag.ServiceTypeOptions)
+                                {
+                                    <label class="custom-checkbox-label">
+                                        <input type="checkbox" name="SelectedServiceIds" value="@serviceType.Value" id="SelectedServiceIds_@serviceType.Value" class="custom-checkbox" @(Model.SelectedServiceIds != null && Model.SelectedServiceIds.Contains(Convert.ToInt32(serviceType.Value)) ? "checked" : "")>
+                                        <span class="checkmark"></span>
+                                        @serviceType.Text
+                                    </label>
+                                }
+                                <div style="color: red">
+                                    @Html.ValidationMessageFor(model => model.SelectedServiceIds)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+
+                            <div class="form-group">
+                                <label for="car">Car</label>
+                                @Html.DropDownListFor(model => model.CarId, (IEnumerable<SelectListItem>)ViewBag.CarOptions, "", new { @class = "form-control" })
+                                <div style="color: red">
+                                    @Html.ValidationMessageFor(model => model.CarId)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Kilometerage)
+                                @Html.TextBoxFor(model => model.Kilometerage, new { @class = "form-control input-rounded", type = "text", id = "kilometerageInput" })
+                                <div style="color: red">
+                                    @Html.ValidationMessageFor(model => model.Kilometerage)
+                                </div>
+                            </div>
+
+                            <script>
+                                $(document).ready(function () {
+                                    $("#kilometerageInput").on('input', function () {
+                                        formatNumberInput(this);
+                                    });
+                                });
+
+                                function formatNumberInput(inputElement) {
+                                    var value = inputElement.value;
+                                    // Remove all characters except numbers and commas
+                                    value = value.replace(/[^0-9,]/g, '');
+                                    value = value.replace(/^0+/, ''); // Remove leading zeros
+                                    value = value.replace(/,/g, ''); // Remove commas
+                                    value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ','); // Add commas for thousands separator
+                                    inputElement.value = value;
+                                }
+                            </script>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.PlateNumber)
+                                @Html.TextBoxFor(model => model.PlateNumber, new { @class = "form-control input-rounded" })
+                                <div style="color: red">
+                                    @Html.ValidationMessageFor(model => model.PlateNumber)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <input type="text" id="DateBooking" asp-for="DateBooking" class="form-control input-rounded" name="DateBooking" value="@Model.DateBooking">
+                                <script>
+                                    // Calculate tomorrow's date
+                                    let tomorrow = new Date();
+                                    tomorrow.setDate(tomorrow.getDate() + 1);
+
+                                    // Calculate the date 7 days from today
+                                    let sevenDaysFromNow = new Date();
+                                    sevenDaysFromNow.setDate(sevenDaysFromNow.getDate() + 7);
+
+                                    flatpickr("#DateBooking", {
+                                        enableTime: true, // Enable time selection
+                                        dateFormat: "d-m-Y H:i", // Date and time format
+                                        minDate: tomorrow, // User can't pick a date before tomorrow
+                                        maxDate: sevenDaysFromNow, // User can't pick a date after 7 days from today
+                                        // Additional configuration options go here
+                                    });
+                                </script>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Status)
+                                <br />
+                                @foreach (var statusOption in Model.StatusList)
+                                {
+                                    <label class="radio-label">
+                                        @Html.RadioButtonFor(model => model.Status, statusOption.Value, new { id = "option_" + statusOption.Value })
+                                        <span class="radio-text">@statusOption.Text</span>
+                                    </label>
+                                }
+                                <div style="color : red">
+                                    @Html.ValidationMessageFor(model => model.Status)
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Note)
+                            <br>
+
+                            <!-- Trường văn bản cho CKEditor -->
+                        @Html.TextAreaFor(model => model.Note, new { @id = "editor" })
+
+                            <script>
+                                CKEDITOR.config.language = 'vi';
+                                CKEDITOR.config.contentsLangDirection = 'vi';
+                                CKEDITOR.replace("editor");
+                            </script>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-10">
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="row">
+                                <div class="form-group custom-form-group">
+                                    <button type="submit" formaction="~/admin/bookingservice/listbookingservice" class="btn btn-danger custom-button">Cancel</button>
+                                    <button type="submit" class="btn btn-dark custom-button">Update Booking</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

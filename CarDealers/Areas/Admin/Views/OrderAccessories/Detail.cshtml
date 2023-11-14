@@ -1,0 +1,96 @@
+﻿@model CarDealers.Areas.Admin.Models.OrderAccessoriesViewModel.ViewOrder
+@{
+    ViewBag.Title = "Details";
+}
+<style>
+	.button-container {
+		display: flex;
+		gap: 10px; /* Adjust the gap to set the space between links */
+		justify-content: center;
+	}
+
+	th, td {
+		text-align: center; /* Equal width for each column */
+		color: #000 !important;
+		padding: 8px !important;
+	}
+
+	.resized-img {
+		width: 100px; /* Set the desired width */
+		height: 100px; /* Set the desired height */
+	}
+
+	p {
+		color: #000;
+	}
+
+</style>
+
+<div class="content-wrap">
+
+	<div class="col-lg-12">
+		<div class="card">
+			<div class="table-responsive">
+				<div class="table-wrapper">
+
+					<div style="display: flex; align-items:center;justify-content:space-between">
+						<div>
+							<h1>CAR DEALERS</h1>
+						</div>
+						<div>
+							<p style="margin-bottom:unset">Đc: CAR DEALERS</p>
+							<p style="margin-bottom:unset">ĐT: 0338770668</p>
+						</div>
+					</div>
+
+					
+					<div style="display: flex; align-items:center;justify-content:space-between; margin-top:20px">
+						<div style="margin-left:500px">
+								<h2>ORDER: # @Model.OrderId</h2>
+						</div>
+						<div>
+							<p>Ngày: @Model.CreatedOn</p> 
+							<a href="#">Prinf |</a><a href="#"> PDF |</a><a href="#"> Email</a>
+						</div>
+					</div>
+					
+					
+					<h2>THÔNG TIN KHÁCH HÀNG</h2>
+						<p>Họ và tên : @Model.FullName </p>
+						<p>Điện thoại : @Model.PhoneNumber</p>
+					
+					<h2>THÔNG TIN ĐƠN HÀNG</h2>
+					<table border="1">
+						<thead>
+							<tr>
+								<th>STT</th>
+								<th>Tên hàng</th>
+								<th>Đơn giá tính theo VNĐ</th>
+								<th>Số lượng</th>
+								<th>Voucher</th>
+								<th>Thành tiền</th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach(var item in Model.OrderAccessories){
+							<tr>
+								<td>@item.AccessoryId</td>
+								<td>@item.Accessory.AccessoryName</td>
+								<td>@item.Accessory.ExportPrice?.ToString("n0") VNĐ</td>
+								<td>@item.Quantity</td>
+									<td>@(item.Coupon == null ? null : item.Coupon.Name) </td>
+								<td>@item.TotalPrice?.ToString("n0") VNĐ</td>
+							</tr>
+							}
+						</tbody>
+					</table>
+					
+					<p style="margin-top:6px;float:unset; margin-left: 700px">Tổng tiền: @Model.totalPrice.ToString("n0") VNĐ</p>
+					
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>

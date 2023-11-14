@@ -1,0 +1,43 @@
+﻿@using CarDealers.Entity;
+@model IEnumerable<CarDealers.Entity.Car>
+@inject CarDealers.Entity.CarDealersContext db
+
+@{
+	List<Car> cars = db.Cars.Where(x => x.DeleteFlag == false).ToList();
+}
+
+<section class="car_section layout_padding">
+	<div class="container">
+		<div class="heading_container">
+			<h2>
+				Our Cars
+			</h2>
+			<hr>
+		</div>
+		<div class="row row-cols-1 row-cols-md-3 g-4">
+			@foreach (var item in cars)
+			{
+				<div class="col">
+
+					<div class="card h-100">
+						<img src="~/@item.Image" class="card-img-top" alt="..." style="height: 190px;object-fit: contain;">
+						<div class="card-body">
+							<h5 class="card-title">@item.Model</h5>
+							<p class="card-text">Giá từ: @item.ExportPrice VND</p>
+							<div class="d-flex justify-content-center">
+								<a href="" class="see_more-btn">
+									Chi tiết
+								</a>
+								<a href="" class="see_more-btn">
+									Liên hệ
+								</a>
+							</div>
+
+						</div>
+
+					</div>
+				</div>
+			}
+		</div>
+	</div>
+</section>

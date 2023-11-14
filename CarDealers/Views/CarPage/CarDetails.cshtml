@@ -1,0 +1,108 @@
+﻿@model CarDealers.Entity.Car
+@{
+    ViewData["Title"] = "Cars Details";
+}
+@Html.AntiForgeryToken()
+
+<section class="layout_padding">
+	<div class="container">
+		<div class="heading_container">
+			<div class="container">
+				<div class="heading_container">
+					<h2>
+						Car Details
+					</h2>
+
+				</div>
+				<br>
+				<hr>
+
+				
+				<div>
+					<h1 style=" font-size: 45px;margin-top: 35px">@Html.Raw(Model.Model)</h1>
+                    <p style="color:red;font-size: 20px;">@Html.Raw(Model.ExportPrice)</p>
+                    
+
+                    <img style="height:500px;width:800px;" src="@Url.Content("~/"+Model.Image)" class="card-img-top">
+
+
+
+                    <style>
+                        table {
+                            width: 75%;
+                            border-collapse: collapse;
+                        }
+
+                        th, td {
+                            border: 1px solid black;
+                            padding: 8px;
+                            text-align: center;
+                            
+                        }
+
+                        th {
+                            background-color: #f2f2f2;
+                        }
+                    </style>
+
+
+
+
+                    <h3 style="margin-top:20px;margin-bottom:20px">Car information : </h3>
+                    
+                        <table>
+                            <tr>
+                            <th >Brand</th>
+                                <td>@Html.Raw(Model.Brand.BrandName)</td>
+                                <th>Car type </th>
+                                <td>@Html.Raw(Model.CarType.TypeName)</td>
+                                <th>Year </th>
+                                <td>@Html.Raw(Model.Year)</td>
+                            </tr>
+                            <tr>
+                                <th>Mileaque</th>
+                                <td>@Html.Raw(Model.Mileage)Km</td>
+                                <th>Engine type</th>
+                                <td>@Html.Raw(Model.EngineType.EngineTypeName)</td>
+                                <th>Fule type</th>
+                                <td>@Html.Raw(Model.FuelType.FuelTypeName)</td>
+                            </tr>
+                            <tr>
+                                <th>Tranmission</th>
+                                <td>@Html.Raw(Model.Transmission)</td>
+                            <th>Description</th>
+                            <td>@Html.Raw(Model.Description)</td>
+                            </tr>
+                        </table>
+
+
+                    <h3 style="margin-top:20px;margin-bottom:20px">Introduction : </h3>
+                    @Html.Raw(Model.Content)
+
+
+                    <h3 style="margin-top:20px;margin-bottom:20px">More images : </h3>
+
+                    <div class="image-gallery">
+                        @foreach (var image in Model.ImageCars)
+                        {
+                            <img src="@Html.Raw("/"+image.Image)" style="width: 800px;height: 500px; margin: 10px;">
+                        }
+                    </div>
+
+
+                    
+
+                                                          
+			
+			
+
+				
+			</div>
+		</div>
+		</div>
+        <hr>
+        <a style="float:right" class="btn btn-dark" href="~/CarPage/Index">Back to list </a>
+	</div>
+</section>
+
+

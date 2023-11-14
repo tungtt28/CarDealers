@@ -1,0 +1,100 @@
+﻿@model CarDealers.Areas.Admin.Models.OrderCarViewModel.ViewOrderCarViewModel
+@{
+    ViewBag.Title = "View Order";
+}
+<style>
+    th, td {
+        text-align: center; /* Equal width for each column */
+        color: #000 !important;
+        padding: 8px !important;
+    }
+
+    p {
+        color: #000;
+    }
+
+</style>
+
+<div class="content-wrap">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="table-responsive">
+                <div class="table-wrapper">
+                    <div style="display: flex; align-items:center;justify-content:space-between">
+                        <div>
+                            <h1>CAR DEALERS</h1>
+                        </div>
+                        <div>
+                            <p style="margin-bottom:unset">Đc: CAR DEALERS</p>
+                            <p style="margin-bottom:unset">ĐT: 0338770668</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items:center;justify-content:space-between; margin-top:20px">
+                        <div style="margin-left:500px">
+                            <h2>ORDER: # @Model.OrderId</h2>
+                        </div>
+                        <div>
+                            <p>Ngày: @Model.CreatedOn</p>
+                            <a href="~/admin/OrderCar/SavePDF?id=@Model.OrderId">Save PDF |</a><a href="~/admin/OrderCar/SendEmail?email=@Model.Email&id=@Model.OrderId"> Email order to customer</a>
+                        </div>
+                    </div>
+                    <h2>THÔNG TIN KHÁCH HÀNG</h2>
+                    <p>Họ và tên : @Model.FullName </p>
+                    <p>Điện thoại : @Model.PhoneNumber</p>
+                    @if (Model.Status == 0 || Model.Status == 1)
+                    {
+                        <h2>THÔNG TIN ĐẶT CỌC ĐƠN HÀNG</h2>
+                    }
+                    else
+                    {
+                        <h2>THÔNG TIN ĐƠN HÀNG</h2>
+                    }
+                    <table border="1">
+                        <thead>
+                            <tr>
+                                <th>Tên xe</th>
+                                <th>Đơn giá tính theo VNĐ</th>
+                                <th>Số lượng</th>
+                                <th>Giảm giá</th>
+                                @if (Model.Status == 0 || Model.Status == 1)
+                                {
+                                    <th>Đặt cọc 15%</th>
+                                }
+                                else
+                                {
+                                    <th>Đặt cọc 15%</th>
+                                    <th>Thành tiền</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>@Model.FullName</td>
+                                <td>@Model.Price VND</td>
+                                <td>@Model.Quantity</td>
+                                <td>@Model.Discount</td>
+                                @if (Model.Status == 0 || Model.Status == 1)
+                                {
+                                    <td>@Model.Deposite VND</td>
+                                }
+                                else
+                                {
+                                    <td>@Model.Deposite VND</td>
+                                    <td>@Model.TotalPrice VND</td>
+                                }
+                            </tr>
+                        </tbody>
+                    </table>
+                    @if (Model.Status == 0 || Model.Status == 1)
+                    {
+                        <p style="margin-top:6px;float:unset">Thành tiền: @Model.Deposite VND</p>
+                    }
+                    else
+                    {
+                        <p style="margin-top:6px;float:unset">Thành tiền: @Model.TotalPrice VND</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

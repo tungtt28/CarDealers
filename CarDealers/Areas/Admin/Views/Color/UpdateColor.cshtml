@@ -1,0 +1,25 @@
+﻿@model CarDealers.Entity.Color
+@{
+    ViewBag.Title = "Update Color";
+}
+<div class="content-wrap">
+    <div class="col-lg-12">
+        <div class="card">
+            @using (Html.BeginForm("UpdateColor", "Color", new { id = Model.ColorId }, FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ColorName)
+                    @Html.TextBoxFor(model => model.ColorName, new { @class = "form-control input-rounded" })
+                    <div style="color : red">
+                    @Html.ValidationMessageFor(x => x.ColorName)
+                    </div>
+                </div>
+                @Html.HiddenFor(model => model.ColorId)
+                <!-- Add form fields for other properties you want to edit -->
+
+                <button type="submit" class="btn btn-dark">Save Changes</button>
+            }
+        </div>
+    </div>
+</div>

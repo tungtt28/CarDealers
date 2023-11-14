@@ -1,0 +1,78 @@
+﻿@model CarDealers.Entity.News
+@{
+    ViewBag.Title = "Create News";
+}
+
+<div class="content-wrap">
+    <div class="col-lg-12">
+        <div class="card">
+            @using (Html.BeginForm("CreateNews", "News", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-group">
+                    <label for="newsType">News Type:</label>
+                    @Html.DropDownList("newsType", (IEnumerable<SelectListItem>)ViewBag.NewsTypeOptions,"", new { @class = "form-control" })
+                </div>
+
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Title)
+                    @Html.TextBoxFor(model => model.Title, new { @class = "form-control input-rounded" })
+                    <div style="color : red">
+                        @Html.ValidationMessageFor(model => model.Title)
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Content)
+                    <br>
+
+                    <!-- Trường văn bản cho CKEditor -->
+                @Html.TextAreaFor(model => model.Content, new { @id = "editor" })
+
+                    <script>
+                        CKEDITOR.replace("editor");
+                    </script>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Order)
+                    @Html.TextBoxFor(model => model.Order, new { @class = "form-control input-rounded", type = "number", id = "orderInput", min = 1 })
+                    <div style="color: red">
+                        @Html.ValidationMessageFor(model => model.Order)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PublishDate)
+                    @Html.TextBoxFor(model => model.PublishDate, new { @class = "form-control input-rounded", type = "date" })
+                    <div style="color : red">
+                        @Html.ValidationMessageFor(model => model.PublishDate)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Image, "Upload Image")
+                    <input type="file" id="image" name="image" class="form-control-file" />
+                    <div style="color: red">
+                        @Html.ValidationMessageFor(model => model.Image)
+                    </div>
+                </div>
+
+                @if (TempData["ErrorMessageImage"] != null)
+                {
+                    <div class="alert alert-danger">
+                        @TempData["ErrorMessageImage"]
+                    </div>
+                }
+
+                <!-- Add other form fields as needed -->
+
+                <button type="submit" class="btn btn-dark">Create News</button>
+            }
+        </div>
+        <a style="float:right" class="btn btn-dark" href="~/admin/News/ListNews">Back to list</a>
+    </div>
+</div>

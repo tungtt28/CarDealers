@@ -1,0 +1,131 @@
+﻿@model CarDealers.Areas.Admin.Models.OrderAccessoriesViewModel.ViewOrder
+@{
+	ViewBag.Title = "Update";
+}
+<style>
+	.button-container {
+		display: flex;
+		gap: 10px; /* Adjust the gap to set the space between links */
+		justify-content: center;
+	}
+
+	th, td {
+		text-align: center; /* Equal width for each column */
+		color: #000 !important;
+		padding: 8px !important;
+	}
+
+	.resized-img {
+		width: 100px; /* Set the desired width */
+		height: 100px; /* Set the desired height */
+	}
+
+	p {
+		color: #000;
+	}
+
+</style>
+
+<div class="content-wrap">
+	
+	<form method="post" action="@Url.Action("Update", "OrderAccessories", new { area = "admin" })">
+		@Html.HiddenFor(model => model.OrderId)
+
+	<div class="col-lg-12">
+		<div class="card">
+			<div class="table-responsive">
+				<div class="table-wrapper">
+
+					<h2>THÔNG TIN ĐƠN HÀNG</h2>
+						<table border="1">
+						<thead>
+							<tr>
+								<th>STT</th>
+								<th>Tên hàng</th>
+								<th>Đơn giá tính theo VNĐ</th>
+								<th>Số lượng</th>
+								<th>Voucher</th>
+								<th>Thành tiền</th>
+							</tr>
+						</thead>
+							<tbody>
+								@for (var i = 0; i < Model.OrderAccessories.Count; i++)
+								{
+									var item = Model.OrderAccessories[i];
+									<tr>
+										<td>@item.AccessoryId</td>
+										<td>@item.Accessory.AccessoryName</td>
+										<td>@item.Accessory.ExportPrice?.ToString("n0") VNĐ</td>
+										<td>
+											<input type="number" name="OrderAccessories[@i].OrderAccessoryId" value="@item.OrderAccessoryId" style="display: none" />
+											<input type="number" name="OrderAccessories[@i].Quantity" value="@item.Quantity" />
+										</td>
+										@*<td><input type="hidden" id="percent" name="percent" value="@item.Coupon == null ? null : @item.Coupon?.PercentDiscount "> @item.Coupon.Name</td>*@
+										<td>
+											<input type="hidden" id="percent" name="percent" value="@(item.Coupon == null ? "" : item.Coupon.PercentDiscount.ToString())">@item.Coupon?.Name
+										</td>
+
+										<td>@item.TotalPrice?.ToString("n0") VNĐ</td>
+									</tr>
+								}
+							</tbody>
+					</table>
+						<script>
+							$(document).ready(function () {
+								// Attach an event handler to all quantity input fields
+								$("input[name^='OrderAccessories'][name$='.Quantity']").on("input", function () {
+									var $row = $(this).closest("tr");
+									var exportPrice = parseFloat($row.find("td:eq(2)").text().replace(/\D/g, ''));
+									var quantity = parseFloat($(this).val());
+									var percent = parseFloat($row.find("#percent").val());
+									var totalPrice =(quantity * exportPrice) - (quantity * exportPrice * (percent / 100));
+
+									// Update the displayed total price with thousands separators
+									$row.find("td:eq(5)").text(formatPrice(totalPrice));
+
+									// Recalculate the grand total
+									updateGrandTotal();
+								});
+
+								function formatPrice(price) {
+									// Format the price with thousands separators
+									var formattedPrice = price.toLocaleString("en-US", {
+										minimumFractionDigits: 0,
+										maximumFractionDigits: 0
+									}) + " VNĐ";
+									return formattedPrice;
+								}
+
+								function updateGrandTotal() {
+									var grandTotal = 0;
+									$("input[name^='OrderAccessories'][name$='.Quantity']").each(function () {
+										var $row = $(this).closest("tr");
+										var exportPrice = parseFloat($row.find("td:eq(2)").text().replace(/\D/g, ''));
+										var quantity = parseFloat($(this).val());
+										var percent = parseFloat($row.find("#percent").val());
+										grandTotal += (quantity * exportPrice) - (quantity * exportPrice * (percent / 100));
+									});
+
+									// Update the displayed grand total with thousands separators
+									$("#grandTotal").text(formatPrice(grandTotal));
+								}
+							});
+						</script>
+
+
+
+						<p style="margin-top:6px;float:unset">Tổng tiền: <span id="grandTotal">@Model.totalPrice.ToString("n0") VNĐ</span></p>
+
+					<div class="row">
+                            <div class="col-lg-10">
+                                <button type="submit" formaction="~/admin/OrderAccessories/ListOrderAccessories" class="btn btn-danger custom-button">Cancel</button>
+                                <button type="submit" class="btn btn-dark custom-button">Update</button>
+                            </div>
+                        </div>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+	</form>
+</div>

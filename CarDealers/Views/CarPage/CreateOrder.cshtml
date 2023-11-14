@@ -1,0 +1,201 @@
+﻿@model CarDealers.Models.CarPageModel.CreateOrderViewModel
+@{
+    ViewData["Title"] = "Create Order";
+}
+<style>
+    .section-background {
+        background-image: url('../images/car-background.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+    }
+
+    .bg-indigo {
+        background-color: white;
+    }
+
+    .select-sm {
+        height: 100px; /* Adjust the height as needed */
+        /* Add any other styling you want */
+    }
+
+    .form-edit {
+        height: 70px; /* Adjust the height as needed */
+        /* Add any other styling you want */
+    }
+
+    .btn-check {
+        display: inline-block;
+        width: 20px; /* Adjust the size of the tick */
+        height: 20px; /* Adjust the size of the tick */
+        background: url('checkmark.png') center center no-repeat; /* Use your own image for the checked tick */
+        background-size: cover;
+        vertical-align: middle;
+    }
+
+    /* Style for the custom checkbox container */
+    .custom-checkbox-label {
+        display: block;
+        position: relative;
+        padding-left: 30px; /* Space for the custom checkbox */
+        cursor: pointer;
+        user-select: none;
+        margin-bottom: 10px; /* Add spacing between checkboxes */
+    }
+
+    /* Hide the default checkbox */
+    .custom-checkbox {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    /* Custom checkbox design */
+    .checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 24px;
+        width: 24px;
+        background-color: #fff; /* Background color when unchecked */
+        border: 2px solid #000; /* Border color */
+        border-radius: 5px;
+        transition: background-color 0.3s, border 0.3s;
+    }
+
+    /* Style the custom checkbox when checked */
+    .custom-checkbox:checked + .checkmark {
+        background-color: #000; /* Background color when checked */
+        border-color: #000; /* Border color when checked */
+    }
+
+    /* Custom checkmark (the tick) */
+    .checkmark::after {
+        content: "\2713"; /* Checkmark character */
+        font-size: 16px;
+        color: #fff; /* Checkmark color */
+        display: none;
+    }
+
+    /* Show the checkmark when the checkbox is checked */
+    .custom-checkbox:checked + .checkmark::after {
+        display: block;
+    }
+
+    /* Add rounded corners to the card */
+    .rounded-card {
+        border-radius: 15px;
+    }
+
+        /* Ensure that the background of the car is visible */
+        .rounded-card .card-body {
+            background-color: rgba(255, 255, 255, 0.8); /* Use an appropriate background color with transparency */
+            padding: 20px; /* Add padding to the card content to separate it from the background */
+        }
+
+    .centered-card {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+    }
+</style>
+<section class="h-100 h-custom gradient-custom-2 section-background">
+    <!-- Include Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link href="~/Service/cssService/form.css" rel="stylesheet" type="text/css">
+    <script src="~/Service/jsService/validation.js"></script>
+    <!-- Include Flatpickr JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <div class="row">
+        <div class="row justify-content-center">
+            <div class="col-lg-11">
+                @using (Html.BeginForm("CreateOrder", "CarPage", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="card">
+                        <ul class="zf-tempHeadBdr">
+                            <li class="zf-tempHeadContBdr">
+                                <h2 class="zf-frmTitle"><em>Create Car Order</em></h2>
+                                <p class="zf-frmDesc"></p>
+                                <div class="zf-clearBoth"></div>
+                            </li>
+                        </ul>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <img src="@Url.Content("~/"+ViewBag.Image)" class="card-img-top" alt="..." style="height: 400px;object-fit: contain;">
+                            </div>
+                            <div class="col-lg-6">
+                                @Html.HiddenFor(model => model.CarId)
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.FullName)
+                                    @if (ViewBag.CustomerId != null)
+                                    {
+                                        @Html.TextBoxFor(model => model.FullName, new { @class = "form-control input-rounded", @readonly = "readonly"})
+                                    }
+                                    else
+                                    {
+                                        @Html.TextBoxFor(model => model.FullName, new { @class = "form-control input-rounded"})
+                                    }
+                                    <div style="color: red">
+                                        @Html.ValidationMessageFor(model => model.FullName)
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.PhoneNumber)
+                                    @if (ViewBag.CustomerId != null)
+                                    {
+                                        @Html.TextBoxFor(model => model.PhoneNumber, new { @class = "form-control input-rounded" , @readonly = "readonly"})
+                                    }
+                                    else
+                                    {
+                                        @Html.TextBoxFor(model => model.PhoneNumber, new { @class = "form-control input-rounded"})
+                                    }
+                                    <div style="color: red">
+                                        @Html.ValidationMessageFor(model => model.PhoneNumber)
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Email)
+                                    @if (ViewBag.CustomerId != null)
+                                    {
+                                        @Html.TextBoxFor(model => model.Email, new { @class = "form-control input-rounded", @readonly = "readonly"})
+                                    }
+                                    else
+                                    {
+                                        @Html.TextBoxFor(model => model.Email, new { @class = "form-control input-rounded"})
+                                    }
+                                    <div style="color: red">
+                                        @Html.ValidationMessageFor(model => model.Email)
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Quantity)
+                                    @Html.TextBoxFor(model => model.Quantity, new { @class = "form-control input-rounded" })
+                                    <div style="color: red">
+                                        @Html.ValidationMessageFor(model => model.Quantity)
+                                    </div>
+                                </div>
+
+                            </div>
+                            <ul>
+                                <li class="zf-fmFooter">
+                                    <button type="submit" formaction="~/home/index" class="btn btn-danger">Back</button>
+                                    <button type="submit" class="btn btn-dark">Create order</button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>

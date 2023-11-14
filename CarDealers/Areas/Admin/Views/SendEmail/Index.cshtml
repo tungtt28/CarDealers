@@ -1,0 +1,68 @@
+﻿@addTagHelper *,Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewBag.Title = "Send Mail";
+}
+<link href="~/css/main.css" rel="stylesheet" media="all">
+<div class="content-wrap">
+    <div class="col-lg-12">
+        <form asp-controller="SendEmail" method="post" asp-action="SendEmailAction" enctype="multipart/form-data">
+            <div class="page-wrapper bg-dark p-t-100 p-b-50">
+                <div class="wrapper wrapper--w900">
+                    <div class="card card-6">
+                        <div class="card-heading">
+                            <h2 class="title" style="float: left">
+                                Send email for customer
+                            </h2>
+                        </div>
+                        <div class="card-body">
+                            @if (!string.IsNullOrEmpty(ViewBag.Message))
+                            {
+                                <div class="alert alert-success">@ViewBag.Message</div>
+                            }
+                            @if (!string.IsNullOrEmpty(ViewBag.Error))
+                            {
+                                <div class="alert alert-danger">@ViewBag.Error</div>
+                            }
+
+                            <div class="form-row">
+                                <div class="name">Subject</div>
+                                <div class="value">
+                                    <input class="input--style-6" type="text" id="Subject" name="Subject">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="name">Message</div>
+                                <div class="value">
+                                    <div class="input-group">
+                                        <textarea class="textarea--style-6" id="Body" name="Body" placeholder="Message sent to the customer"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row" style="display: flex; flex-direction: row; align-items: flex-end;">
+                                <div class="name">Send to all customers:</div>
+                                <div>
+                                    <input type="checkbox" id="SendToAll" name="SendToAll" />
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="name">Upload attachment</div>
+                                <div class="value">
+                                    <div class="input-group js-input-file">
+                                        <input type="file" id="Attachment" name="attachment" accept=".pdf, .doc, .docx, .jpg, .jpeg, .png, .rar" style="background-color: darkgray;">                                       
+                                    </div>
+                                    <div class="label--desc">Upload file attachment. Max file size 10 MB</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn--radius-2 btn--blue-2" type="submit">Send</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="~/vendor/jquery/jquery.min.js"></script>
+<script src="~/js/global.js"></script>

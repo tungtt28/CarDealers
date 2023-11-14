@@ -1,0 +1,314 @@
+﻿@model CarDealers.Entity.News
+@{
+    ViewData["Title"] = "News Details";
+}
+
+<style>
+    .container {
+        max-width: 1200px; /* Điều chỉnh độ rộng tối đa của nội dung trang */
+        margin: 0 auto; /* Đưa trang giữa màn hình */
+    }
+
+    .news-title {
+        color: red;
+        font-size: 35px;
+        text-align: center;
+        margin-top: 35px;
+    }
+
+    .news-date {
+        font-size: 17px;
+    }
+
+    .news-type {
+        font-size: 17px;
+    }
+
+    .news-content {
+        margin-left: 100px;
+    }
+
+    .latest-news {
+        display: flex;
+        flex-direction: row;
+    }
+
+        .latest-news img {
+            height: 100px;
+            width: auto;
+        }
+
+        .latest-news a {
+            background-color: white;
+            font-size: 15px;
+            margin-left: 8px;
+            color: black;
+        }
+
+
+
+
+    .image-container {
+        margin-right: 20px;
+    }
+
+        .image-container img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            cursor: pointer;
+        }
+
+    .review-content {
+        flex: 1;
+    }
+
+    .review-options {
+        float:right;
+        display:flex;
+    }
+
+    .review-options-button {
+        cursor: pointer;
+    }
+
+    .review-comment {
+        margin-top: 10px;
+    }
+
+    hr {
+        margin: 20px 0;
+    }
+
+    .comment-container {
+        max-width: 800px; /* Đặt chiều cao tối đa (điều chỉnh theo ý muốn) */
+        overflow: auto; /* Thêm thanh cuộn nếu nội dung tràn ra ngoài */
+        word-wrap: break-word; /* Ngắt dòng khi nội dung quá dài */
+    }
+</style>
+
+@Html.AntiForgeryToken()
+
+<div class="container">
+    <h1 class="news-title">@Html.Raw(Model.Title)</h1>
+
+    <dd style="margin-left:60rem" class="news-date col-sm-10">@(((DateTime)Model.PublishDate).ToString("dd/MM/yyyy")) | @Html.Raw(Model.Author.FullName)</dd>
+    <dd style="margin-left:60rem"  class="news-type col-sm-10">@Html.Raw(Model.NewsType.NewsTypeName)</dd>
+    <dl class="row">
+        <dd class="news-content col-sm-10">@Html.Raw(Model.Content)</dd>
+    </dl>
+
+    <hr>
+
+    <h2>Customer Reviews</h2>
+    @if (Model.Reviews != null && Model.Reviews.Count > 0)
+    {
+        <ul>
+            @foreach (var review in @ViewBag.Reviews)
+            {
+                <li style="display: flex; align-items: center;">
+                    <div class="image-container">
+                        <img class="rounded-circle mt-5" id="show-avatar" width="80" height="80" src="/@review.Customer.Image" alt="Avatar"
+                             style="object-fit: cover; cursor: pointer;">
+                    </div>
+                    <div style="margin-left: 40px;">
+                        <div style="display: flex; align-items: center;">
+                            <p style="font-size:20px; font-weight:bold; margin-right: 10px;">@review.Customer.FullName</p>
+                            <h3 style="margin-left:50px;margin-bottom:20px">@GetStarRating(review.Rating)</h3>
+                            @if (ViewBag.CustomerID != null && ViewBag.CustomerID == review.Customer.CustomerId)
+                            {
+                                <div class="dropdown">
+                                    <a href="javascript:void(0);" style="font-size:40px; margin-left:650px" class="review-options">...</a>
+                                    <div class="dropdown-menu" style="display: none; margin-left:650px">
+                                        <a class="dropdown-item" href="javascript:void(0);" onclick="editReview(@review.ReviewId, @review.Rating, '@review.Comment')">Edit</a>
+                                        <a class="dropdown-item" href="#" onclick="showDeleteConfirmation(@review.ReviewId)">Delete</a>
+                                    </div>
+                                </div>
+
+                            }
+                        </div>
+                        <p style="font-size:13px">@review.PublishDate</p>
+                        <p class="comment-container">@review.Comment</p>
+                                              
+
+                    </div>                  
+                </li>
+                <hr>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>No customer reviews available for this news.</p>
+    }
+
+
+
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit comment</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form asp-action="EditComment" asp-controller="NewsPage" method="post">
+                <div class="modal-body">
+                    
+                        <input type="hidden" asp-for="NewsId" value="@Model.NewsId" />
+
+                        <input type="hidden" id="editReviewId" name="ReviewId" value="" />
+
+
+                        <div class="form-group">
+                            <label for="rating">Rating:</label>
+                            <select class="form-control" id="rating" name="rating">
+                                <option value="5">★★★★★ (5/5)</option>
+                                <option value="4">★★★★☆ (4/5)</option>
+                                <option value="3">★★★☆☆ (3/5)</option>
+                                <option value="2">★★☆☆☆ (2/5)</option>
+                                <option value="1">★☆☆☆☆ (1/5)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="commentText">Comment:</label>
+                            <textarea class="form-control" id="Comment" name="Comment" rows="3"></textarea>
+                        </div>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+               
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    
+    
+    <div class="mt-2">
+        <h5 class="mb-4">Submit comments on this article here</h5>
+        <form asp-action="AddComment" asp-controller="NewsPage" method="post">
+            <input type="hidden" asp-for="NewsId" value="@Model.NewsId" />
+            <div class="form-group">
+                <label for="rating">Rating:</label>
+                <select class="form-control" id="rating" name="rating">
+                    <option value="5">★★★★★ (5/5)</option>
+                    <option value="4">★★★★☆ (4/5)</option>
+                    <option value="3">★★★☆☆ (3/5)</option>
+                    <option value="2">★★☆☆☆ (2/5)</option>
+                    <option value="1">★☆☆☆☆ (1/5)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="commentText">Comment:</label>
+                <textarea class="form-control" id="Comment" name="Comment" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Comment</button>
+        </form>
+    </div>
+
+
+
+    <hr>
+    <h2 style="margin-left: 10rem; margin-top: 1rem; margin-bottom: 1rem">Lastest news :</h2>
+    <div class="row">
+        @foreach (var newsItem in @ViewBag.LatestNews)
+        {
+            <div class="latest-news col-sm-4">
+                <img src="@Url.Content("~/"+newsItem.Image)">
+                <a onmouseover="changeColor(this)" onmouseout="changeColor1(this)" href="~/NewsPage/ViewDetails?id=@newsItem.NewsId" class="card-title">@newsItem.Title</a>
+            </div>
+        }
+    </div>
+</div>
+
+<a style="float: right; margin-right: 50px; margin-top: 23px; margin-bottom: 10px" href="~/NewsPage/News" class="btn btn-dark">Back To List News</a>
+<hr style="margin-bottom: 50px">
+</div>
+
+<!-- end car section -->
+<!-- info section -->
+@functions {
+    public string GetStarRating(int rating)
+    {
+        string stars = "";
+        for (int i = 1; i <= 5; i++)
+        {
+            if (i <= rating)
+            {
+                stars += "★";
+            }
+            else
+            {
+                stars += "☆";
+            }
+        }
+        return stars;
+    }
+}
+
+
+
+<script>
+
+    function showDeleteConfirmation(reviewId) {
+        if (confirm("Are you sure you want to delete this review?")) {
+            // Nếu người dùng xác nhận, chuyển hướng đến action Delete với reviewId
+            window.location = '@Url.Action("Delete", "NewsPage", new { id = "REVIEW_ID" })'.replace('REVIEW_ID', reviewId);
+        }
+    }
+    function changeColor(x) {
+        x.style.color = "Blue";
+    }
+
+    function changeColor1(x) {
+        x.style.color = "Black";
+    }
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".review-options").click(function () {
+            var dropdownMenu = $(this).next(".dropdown-menu");
+            if (dropdownMenu.is(":visible")) {
+                dropdownMenu.hide();
+            } else {
+                $(".dropdown-menu").hide();
+                dropdownMenu.show();
+            }
+        });
+    });
+</script>
+
+<script>
+    function editReview(reviewId, rating, comment) {
+        // Assuming you have fields with IDs 'editRating' and 'editComment' in your modal form
+        $('#rating').val(rating); // Set the rating dropdown to the current rating
+        $('#Comment').val(comment); // Set the comment text area to the current comment
+
+        // Now show the modal
+        $('#exampleModal').modal('show');
+    }
+</script>
+
+<script>
+    function editReview(reviewId, rating, comment) {
+        // Set the hidden field for the review ID
+        $('#editReviewId').val(reviewId);
+
+        // Set the other fields for rating and comment
+        $('#rating').val(rating);
+        $('#Comment').val(comment);
+
+        // Now show the modal
+        $('#exampleModal').modal('show');
+    }
+</script>

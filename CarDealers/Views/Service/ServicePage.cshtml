@@ -1,0 +1,325 @@
+﻿@model CarDealers.Models.BookingServiceModel.CreateGuestBookingServiceViewModel
+@{
+    ViewData["Title"] = "Service";
+}
+<style>
+    .section-background {
+        background-image: url('../images/car-background.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+    }
+
+    .bg-indigo {
+        background-color: white;
+    }
+
+    .select-sm {
+        height: 100px; /* Adjust the height as needed */
+        /* Add any other styling you want */
+    }
+
+    .form-edit {
+        height: 70px; /* Adjust the height as needed */
+        /* Add any other styling you want */
+    }
+
+    .btn-check {
+        display: inline-block;
+        width: 20px; /* Adjust the size of the tick */
+        height: 20px; /* Adjust the size of the tick */
+        background: url('checkmark.png') center center no-repeat; /* Use your own image for the checked tick */
+        background-size: cover;
+        vertical-align: middle;
+    }
+
+    /* Style for the custom checkbox container */
+    .custom-checkbox-label {
+        display: block;
+        position: relative;
+        padding-left: 30px; /* Space for the custom checkbox */
+        cursor: pointer;
+        user-select: none;
+        margin-bottom: 10px; /* Add spacing between checkboxes */
+    }
+
+    /* Hide the default checkbox */
+    .custom-checkbox {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    /* Custom checkbox design */
+    .checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 24px;
+        width: 24px;
+        background-color: #fff; /* Background color when unchecked */
+        border: 2px solid #000; /* Border color */
+        border-radius: 5px;
+        transition: background-color 0.3s, border 0.3s;
+    }
+
+    /* Style the custom checkbox when checked */
+    .custom-checkbox:checked + .checkmark {
+        background-color: #000; /* Background color when checked */
+        border-color: #000; /* Border color when checked */
+    }
+
+    /* Custom checkmark (the tick) */
+    .checkmark::after {
+        content: "\2713"; /* Checkmark character */
+        font-size: 16px;
+        color: #fff; /* Checkmark color */
+        display: none;
+    }
+
+    /* Show the checkmark when the checkbox is checked */
+    .custom-checkbox:checked + .checkmark::after {
+        display: block;
+    }
+
+    /* Add rounded corners to the card */
+    .rounded-card {
+        border-radius: 15px;
+    }
+
+        /* Ensure that the background of the car is visible */
+        .rounded-card .card-body {
+            background-color: rgba(255, 255, 255, 0.8); /* Use an appropriate background color with transparency */
+            padding: 20px; /* Add padding to the card content to separate it from the background */
+        }
+
+    .centered-card {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+    }
+</style>
+<section class="h-100 h-custom gradient-custom-2 section-background">
+    <!-- Include Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link href="~/Service/cssService/form.css" rel="stylesheet" type="text/css">
+    <script src="~/Service/jsService/validation.js"></script>
+    <!-- Include Flatpickr JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <div class="row">
+        <div class="row justify-content-center">
+            <div class="col-lg-11">
+                @using (Html.BeginForm("CreateBookingService", "Service", FormMethod.Post))
+                {
+
+                    @Html.AntiForgeryToken()
+                    <div class="zf-templateWidth">
+                        <input type="hidden" name="zf_referrer_name" value=""><!-- To Track referrals , place the referrer name within the " " in the above hidden input field -->
+                        <input type="hidden" name="zf_redirect_url" value=""><!-- To redirect to a specific page after record submission , place the respective url within the " " in the above hidden input field -->
+                        <input type="hidden" name="zc_gad" value=""><!-- If GCLID is enabled in Zoho CRM Integration, click details of AdWords Ads will be pushed to Zoho CRM -->
+                        <div class="zf-templateWrapper">
+                            <!---------template Header Starts Here---------->
+                            <ul class="zf-tempHeadBdr">
+                                <li class="zf-tempHeadContBdr">
+                                    <h2 class="zf-frmTitle"><em>Booking service</em></h2>
+                                    <p class="zf-frmDesc"></p>
+                                    <div class="zf-clearBoth"></div>
+                                </li>
+                            </ul><!---------template Header Ends Here---------->
+                            <!---------template Container Starts Here---------->
+                            <div class="zf-subContWrap zf-topAlign">
+                                <ul>
+                                    <!---------Name Starts Here---------->
+                                    <li class="zf-tempFrmWrapper zf-name zf-namelarge">
+                                        <label class="zf-labelName">
+                                            Full name
+                                            <em class="zf-important">*</em>
+                                        </label>
+                                        <div class="zf-tempContDiv">
+                                            <div class="zf-nameWrapper">
+                                                <div class="form-group">
+                                                    @Html.TextBoxFor(model => model.FullName, new { @class = "form-control input-rounded" })
+                                                    <div style="color: red">
+                                                        @Html.ValidationMessageFor(model => model.FullName)
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><div class="zf-clearBoth"></div>
+                                    </li><!---------Name Ends Here---------->
+                                    <!---------Email Starts Here---------->
+                                    <li class="zf-tempFrmWrapper zf-large">
+                                        <label class="zf-labelName">
+                                            Email
+                                            <em class="zf-important">*</em>
+                                        </label>
+                                        <div class="zf-tempContDiv">
+                                            <div class="form-group">
+                                                @Html.TextBoxFor(model => model.Email, new { @class = "form-control input-rounded" })
+                                                <div style="color: red">
+                                                    @Html.ValidationMessageFor(model => model.Email)
+                                                </div>
+                                            </div>
+                                        </div><div class="zf-clearBoth"></div>
+                                    </li>
+                                    <li class="zf-tempFrmWrapper zf-large">
+                                        <label class="zf-labelName">
+                                            Phone Number
+                                            <em class="zf-important">*</em>
+                                        </label>
+                                        <div class="zf-tempContDiv">
+                                            <div class="form-group">
+                                                @Html.TextBoxFor(model => model.PhoneNumber, new { @class = "form-control input-rounded" })
+                                                <div style="color: red">
+                                                    @Html.ValidationMessageFor(model => model.PhoneNumber)
+                                                </div>
+                                            </div>
+                                        </div><div class="zf-clearBoth"></div>
+                                    </li>
+                                    <li class="zf-tempFrmWrapper zf-large">
+                                        <label class="zf-labelName">
+                                            Service Type
+                                            <em class="zf-important">*</em>
+                                        </label>
+                                        <div class="zf-tempContDiv">
+                                            <div class="form-group">
+                                                @foreach (var serviceType in ViewBag.ServiceTypeOptions)
+                                                {
+                                                    <label class="custom-checkbox-label">
+                                                        <input type="checkbox" name="SelectedServiceIds" value="@serviceType.Value" id="SelectedServiceIds_@serviceType.Value" class="custom-checkbox" @(Model.SelectedServiceIds != null && Model.SelectedServiceIds.Contains(Convert.ToInt32(serviceType.Value)) ? "checked" : "")>
+                                                        <span class="checkmark"></span>
+                                                        @serviceType.Text
+                                                    </label>
+                                                }
+                                                <div style="color: red">
+                                                    @Html.ValidationMessageFor(model => model.SelectedServiceIds)
+                                                </div>
+                                            </div>
+                                        </div><div class="zf-clearBoth"></div>
+                                    </li>
+                                    <li class="zf-tempFrmWrapper zf-large">
+                                        <label class="zf-labelName">
+                                            Car
+                                            <em class="zf-important">*</em>
+                                        </label>
+                                        <div class="zf-tempContDiv">
+                                            <div class="form-group">
+                                                @Html.DropDownListFor(model => model.CarId, (IEnumerable<SelectListItem>)ViewBag.CarOptions, "", new { @class = "form-control" })
+                                                <div style="color: red">
+                                                    @Html.ValidationMessageFor(model => model.CarId)
+                                                </div>
+                                            </div>
+                                        </div><div class="zf-clearBoth"></div>
+                                    </li><!---------Email Ends Here---------->
+                                    <li class="zf-tempFrmWrapper zf-large">
+                                        <label class="zf-labelName">
+                                            Kilometerage
+                                            <em class="zf-important">*</em>
+                                        </label>
+                                        <div class="zf-tempContDiv">
+                                            <div class="form-group">
+                                                @Html.TextBoxFor(model => model.Kilometerage, new { @class = "form-control input-rounded", type = "text", id = "kilometerageInput" })
+                                                <div style="color: red">
+                                                    @Html.ValidationMessageFor(model => model.Kilometerage)
+                                                </div>
+                                            </div>
+                                        </div><div class="zf-clearBoth"></div>
+                                        <script>
+                                            $(document).ready(function () {
+                                                $("#kilometerageInput").on('input', function () {
+                                                    formatNumberInput(this);
+                                                });
+                                            });
+
+                                            function formatNumberInput(inputElement) {
+                                                var value = inputElement.value;
+                                                // Remove all characters except numbers and commas
+                                                value = value.replace(/[^0-9,]/g, '');
+                                                value = value.replace(/^0+/, ''); // Remove leading zeros
+                                                value = value.replace(/,/g, ''); // Remove commas
+                                                value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ','); // Add commas for thousands separator
+                                                inputElement.value = value;
+                                            }
+                                        </script>
+                                    </li><!---------Email Ends Here---------->
+                                    <li class="zf-tempFrmWrapper zf-large">
+                                        <label class="zf-labelName">
+                                            Plate Number
+                                            <em class="zf-important">*</em>
+                                        </label>
+                                        <div class="zf-tempContDiv">
+                                            <div class="form-group">
+                                                @Html.TextBoxFor(model => model.PlateNumber, new { @class = "form-control input-rounded" })
+                                                <div style="color: red">
+                                                    @Html.ValidationMessageFor(model => model.PlateNumber)
+                                                </div>
+                                            </div>
+                                        </div><div class="zf-clearBoth"></div>
+                                    </li><!---------Email Ends Here---------->
+                                    <li class="zf-tempFrmWrapper zf-large">
+                                        <label class="zf-labelName">
+                                            Date Booking
+                                            <em class="zf-important">*</em>
+                                        </label>
+                                        <div class="zf-tempContDiv">
+                                            <div class="form-group">
+                                                <input type="text" id="DateBooking" asp-for="DateBooking" class="form-control input-rounded" name="DateBooking" value="@Model.DateBooking">
+                                                <div style="color: red">
+                                                    @Html.ValidationMessageFor(model => model.DateBooking)
+                                                </div>
+                                            </div>
+
+                                            <script>
+                                                // Calculate tomorrow's date
+                                                let tomorrow = new Date();
+                                                tomorrow.setDate(tomorrow.getDate() + 1);
+
+                                                // Calculate the date 7 days from today
+                                                let sevenDaysFromNow = new Date();
+                                                sevenDaysFromNow.setDate(sevenDaysFromNow.getDate() + 7);
+
+                                                flatpickr("#DateBooking", {
+                                                    enableTime: true, // Enable time selection
+                                                    dateFormat: "d-m-Y H:i", // Date and time format
+                                                    minDate: tomorrow, // User can't pick a date before tomorrow
+                                                    maxDate: sevenDaysFromNow, // User can't pick a date after 7 days from today
+                                                    // Additional configuration options go here
+                                                });
+                                            </script>
+                                        </div><div class="zf-clearBoth"></div>
+                                    </li><!---------Email Ends Here---------->
+                                    <li class="zf-tempFrmWrapper zf-large">
+                                        <label class="zf-labelName">
+                                            Note
+                                            <em class="zf-important">*</em>
+                                        </label>
+                                        <div class="zf-tempContDiv">
+                                            <div class="form-group">
+                                                <br>
+
+                                                <!-- Trường văn bản cho CKEditor -->
+                                                @Html.TextAreaFor(model => model.Note, new { @id = "editor" })
+
+                                                <script>
+                                                    CKEDITOR.config.language = 'vi';
+                                                    CKEDITOR.config.contentsLangDirection = 'vi';
+                                                    CKEDITOR.replace("editor");
+                                                </script>
+                                            </div>
+                                        </div><div class="zf-clearBoth"></div>
+                                    </li><!---------Email Ends Here---------->
+                                </ul>
+                            </div><!---------template Container Starts Here---------->
+                            <ul>
+                                <li class="zf-fmFooter">
+                                    <button type="submit" formaction="~/home/index" class="btn btn-danger custom-button">Back</button>
+                                    <button type="submit" class="btn btn-dark custom-button">Submit</button>
+                                </li>
+                            </ul>
+                        </div><!-- 'zf-templateWrapper' ends -->
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>

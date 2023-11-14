@@ -1,0 +1,183 @@
+﻿@model IEnumerable<CarDealers.Models.BookingServiceModel.ViewBookingCustomer>
+@{
+    ViewData["Title"] = "Your Booking";
+}
+<style>
+    .section-background {
+        background-image: url('../images/car-background.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+    }
+
+    .bg-indigo {
+        background-color: white;
+    }
+
+    .select-sm {
+        height: 100px; /* Adjust the height as needed */
+        /* Add any other styling you want */
+    }
+
+    .form-edit {
+        height: 70px; /* Adjust the height as needed */
+        /* Add any other styling you want */
+    }
+
+    .btn-check {
+        display: inline-block;
+        width: 20px; /* Adjust the size of the tick */
+        height: 20px; /* Adjust the size of the tick */
+        background: url('checkmark.png') center center no-repeat; /* Use your own image for the checked tick */
+        background-size: cover;
+        vertical-align: middle;
+    }
+
+    /* Style for the custom checkbox container */
+    .custom-checkbox-label {
+        display: block;
+        position: relative;
+        padding-left: 30px; /* Space for the custom checkbox */
+        cursor: pointer;
+        user-select: none;
+        margin-bottom: 10px; /* Add spacing between checkboxes */
+    }
+
+    /* Hide the default checkbox */
+    .custom-checkbox {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    /* Custom checkbox design */
+    .checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 24px;
+        width: 24px;
+        background-color: #fff; /* Background color when unchecked */
+        border: 2px solid #000; /* Border color */
+        border-radius: 5px;
+        transition: background-color 0.3s, border 0.3s;
+    }
+
+    /* Style the custom checkbox when checked */
+    .custom-checkbox:checked + .checkmark {
+        background-color: #000; /* Background color when checked */
+        border-color: #000; /* Border color when checked */
+    }
+
+    /* Custom checkmark (the tick) */
+    .checkmark::after {
+        content: "\2713"; /* Checkmark character */
+        font-size: 16px;
+        color: #fff; /* Checkmark color */
+        display: none;
+    }
+
+    /* Show the checkmark when the checkbox is checked */
+    .custom-checkbox:checked + .checkmark::after {
+        display: block;
+    }
+</style>
+<section class="h-100 h-custom gradient-custom-2 section-background">
+    <!-- Include Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link href="~/Service/cssService/form.css" rel="stylesheet" type="text/css">
+    <script src="~/Service/jsService/validation.js"></script>
+    <!-- Include Flatpickr JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <div class="row">
+        <div class="row justify-content-center">
+            <div class="col-lg-11">
+                @using (Html.BeginForm("CreateBookingService", "Service", FormMethod.Post))
+                {
+
+                    @Html.AntiForgeryToken()
+                    <div class="zf-templateWidth">
+                        <input type="hidden" name="zf_referrer_name" value="">
+                        <input type="hidden" name="zf_redirect_url" value="">
+                        <input type="hidden" name="zc_gad" value="">
+                        <div class="zf-templateWrapper">
+                            <ul class="zf-tempHeadBdr">
+                                <li class="zf-tempHeadContBdr">
+                                    <h2 class="zf-frmTitle"><em>View Booking</em></h2>
+                                    <p class="zf-frmDesc"></p>
+                                    <div class="zf-clearBoth"></div>
+                                </li>
+                            </ul>
+                            <div class="table-responsive">
+                                <div class="table-wrapper">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Id</th>
+                                                <th>Customer Name</th>
+                                                <th>Email</th>
+                                                <th>PhoneNumber</th>
+                                                <th>Booking date</th>
+                                                <th>Car Name</th>
+                                                <th>PlateNumber</th>
+                                                <th>Service</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var bookingService in Model)
+                                            {
+                                                <tr>
+                                                    <td>@bookingService.Id</td>
+                                                    <td>@bookingService.FullName</td>
+                                                    <td>@bookingService.Email</td>
+                                                    <td>@bookingService.PhoneNumber</td>
+                                                    <td>@bookingService.DateBooking</td>
+                                                    <td>@bookingService.CarName</td>
+                                                    <td>@bookingService.PlateNumber</td>
+                                                    <td>@bookingService.Service</td>
+                                                    <td>@bookingService.Status</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                    <div class="d-flex justify-content-center" style="margin-top: 20px">
+                                        <nav aria-label="Page navigation text-center">
+                                            <ul class="pagination">
+                                                @if (ViewBag.PageNumber > 1)
+                                                {
+                                                    <li class="page-item">
+                                                        <a href="ListColor?page=1" class="page-link">&lt&lt</a>
+                                                    </li>
+                                                }
+
+                                                @for (int i = 1; i <= Math.Ceiling((decimal)ViewBag.TotalRecords / ViewBag.PageSize); i++)
+                                                {
+                                                    <li class="page-item @(ViewBag.PageNumber == i ? "active" : "")">
+                                                        <a href="ListColor?page=@i" class="page-link">@i</a>
+                                                    </li>
+                                                }
+
+                                                @if (ViewBag.PageNumber < Math.Ceiling((decimal)ViewBag.TotalRecords / ViewBag.PageSize))
+                                                {
+                                                    <li class="page-item">
+                                                        <a href="ListColor?page=@Math.Ceiling((decimal)ViewBag.TotalRecords / ViewBag.PageSize)" class="page-link">>></a>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                </div>
+                            </div>
+                            <ul>
+                                <li class="zf-fmFooter">
+                                    <button type="submit" formaction="~/home/index" class="btn btn-danger custom-button">Back</button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>

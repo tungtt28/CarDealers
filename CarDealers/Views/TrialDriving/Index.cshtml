@@ -1,0 +1,138 @@
+﻿@addTagHelper *,Microsoft.AspNetCore.Mvc.TagHelpers
+@using CarDealers.Entity;
+@model CarDealers.Models.TrialDrivingModel.TrialDrivingViewModel;
+@{
+    Layout = "_Layout";
+}
+@{
+    ViewData["Title"] = "Trial Driving";
+}
+<section class="contact_section layout_padding-top">
+    <div class="container">
+        <div class="heading_container">
+            <h2>
+                Trial Driving
+            </h2>
+            <hr>
+        </div>
+        <div class="layout_padding">
+            <div class="row">
+                <div class="col-md-6">
+                    <form action="RegisterTrial" method="post">                        
+                        <div class="contact_form-container">
+                            <div>
+                                @if (TempData["ErrorMessage"] != null)
+                                {
+                                    <div class="alert alert-danger">
+                                        @TempData["ErrorMessage"]
+                                    </div>
+                                }
+                                @if (TempData["ErrorFullMessage"] != null)
+                                {
+                                    <div class="alert alert-danger">
+                                        @TempData["ErrorFullMessage"]
+                                    </div>
+                                }
+                                @if (TempData["SuccessMessage"] != null)
+                                {
+                                    <div class="alert alert-success">
+                                        @TempData["SuccessMessage"]
+                                    </div>
+                                }
+                                <div>
+                                    @if (ViewBag.Customer != null)
+                                    {
+                                        <input type="text" class="form-control" placeholder="Full Name" name="fullName" value="@ViewBag.Customer.FullName">
+                                    }
+                                    else
+                                    {
+                                        <input type="text" class="form-control" placeholder="Full Name" name="fullName" value="@Model?.FullName" required>
+                                    }
+                                </div>
+                                @if (TempData["ErrorMessagePhoneNumber"] != null)
+                                {
+                                    <div class="alert alert-danger">
+                                        @TempData["ErrorMessagePhoneNumber"]
+                                    </div>
+                                }
+                                <div>
+                                    @if (ViewBag.Customer != null)
+                                    {
+                                        <input type="text" placeholder="Phone Number" name="phoneNumber" value="@ViewBag.Customer.PhoneNumber">
+                                        <br />
+                                    }
+                                    else
+                                    {
+                                        <input type="text" placeholder="Phone Number" name="phoneNumber" value="@Model?.PhoneNumber" required>
+                                        <br />
+                                    }
+                                </div>
+                                @if (TempData["ErrorMessageEmail"] != null)
+                                {
+                                    <div class="alert alert-danger">
+                                        @TempData["ErrorMessageEmail"]
+                                    </div>
+                                }
+                                <div>
+                                    @if (ViewBag.Customer != null)
+                                    {
+                                        <input type="text" placeholder="Email" name="email" value="@ViewBag.Customer.Email" >
+                                        <br />
+                                    }
+                                    else
+                                    {
+                                        <input type="email" placeholder="Email" name="email" value="@Model?.Email" required>
+                                        <br />
+                                    }
+                                </div>
+                                <div>
+                                    <select class="form-select" name="carId" id="carId" style="width:90%">
+                                        <br />
+                                        <option value="">Select a Model</option>
+                                        @foreach (Car c in ViewBag.Cars)
+                                        {
+                                            <option value="@c.CarId">@c.Model</option>
+                                        }
+                                    </select>
+                                </div>
+                                @if (TempData["ErrorMessageDateBooking"] != null)
+                                {
+                                    <div class="alert alert-danger">
+                                        @TempData["ErrorMessageDateBooking"]
+                                    </div>
+                                }
+                                <div>
+                                    <input type="date" placeholder="Date Booking" name="dateBooking" value="@Model?.DateBooking.ToString("yyyy-MM-dd")" required><br />
+                                </div>
+                                @if (TempData["ErrorMessageDriverLicense"] != null)
+                                {
+                                    <div class="alert alert-danger">
+                                        @TempData["ErrorMessageDriverLicense"]
+                                    </div>
+                                }
+                                <div>
+                                    <input type="text" placeholder="Driver License" name="driverLicense" value="@Model?.DriverLicense" required><br />
+                                </div>
+                                <div>
+                                    <textarea placeholder="Request" name="request" value="@Model?.Request" rows="5" style="width:90%"></textarea>
+                                </div>
+                                <div class="mt-5 d-flex justify-content-center justify-content-sm-start">
+                                    <button type="submit">
+                                        Send
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-6">
+                    <div class="contact_img-box">
+                        <img src="~/images/car-service.jpg" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+

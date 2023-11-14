@@ -1,0 +1,128 @@
+﻿@using CarDealers.Entity;
+@model List<Order>
+
+<h2 style="text-align:center;margin-top:20px;margin-bottom:50px">Order history</h2>
+
+<html>
+<head>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .btn {
+            background-color: #007bff;
+            color: #fff;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+            .btn:hover {
+                background-color: #0056b3;
+            }
+    </style>
+</head>
+<body>
+    @if (Model.Count == 0)
+    {
+        <div class="text-notification" style="display: flex;justify-content: center;text-align: center;max-width: 60%;margin-left: auto;margin-right: auto; background-color:white">
+            <p style="margin-right: 10px;">Do not have any order. </p>
+            <a href="/CarPage/Index">Buy now?</a>
+        </div>
+
+        <div style="display: flex;justify-content: center;">
+            <img src="~/images/NoVehicle.jpg" style="max-width:60%">
+        </div>
+    }
+    else
+    {
+        <table>
+            <tr>
+                <th>Code orders</th>
+                <th>Customer name </th>
+                <th>Email</th>
+                <th>Orders date</th>
+                <th>Status</th>
+                <th>Action</th>
+                <!-- Thêm các cột khác tại đây -->
+            </tr>
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td>#@order.OrderId</td>
+                    <td>@order.Customer.FullName</td>
+                    <td>@order.Customer.Email</td>
+                    <td>@(((DateTime)order.OrderDate).ToString("dd/MM/yyyy"))</td>
+                    <td>
+                        @if (order.Status == 0)
+                        {
+                            <p>Creating order</p>
+                        }
+                        else if (order.Status == 1)
+                        {
+                            <p>Pending payment</p>
+                        }
+                        else if (order.Status == 2)
+                        {
+                            <p>Paid</p>
+                        }
+                        else if (order.Status == 3)
+                        {
+                            <p>Successful delivery</p>
+                        }
+                        else if (order.Status == 4)
+                        {
+                            <p>Delivery failed</p>
+                        }
+                        else if (order.Status == 5)
+                        {
+                            <p>Cancel order"</p>
+                        }
+                    </td>
+                    <th><a href="~/ViewOrder/ViewDetails?id=@order.OrderId"><button class="btn">View Details</button></a></th>
+                    <!-- Hiển thị các cột khác tại đây -->
+                </tr>
+            }
+        </table>
+    }
+</body>
+</html>
+
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+
+

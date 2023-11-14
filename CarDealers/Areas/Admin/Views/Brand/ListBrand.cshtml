@@ -1,0 +1,177 @@
+﻿@model IEnumerable<CarDealers.Entity.Brand>
+@{
+    ViewBag.Title = "List Brand";
+}
+<style>
+    .button-container {
+        display: flex;
+        gap: 10px; /* Adjust the gap to set the space between links */
+        justify-content: center;
+    }
+
+    th, td {
+        text-align: center; /* Equal width for each column */
+    }
+
+    .resized-img {
+        width: 100px; /* Set the desired width */
+        height: 100px; /* Set the desired height */
+    }
+</style>
+<div class="content-wrap">
+    <div class="col-lg-12">
+        <div class="card">
+            <form method="post" action="@Url.Action("ListBrand", "Brand", new { area = "admin" })">
+                <div class="filter-form">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="search-form">
+                                <div class="form-group">
+                                    <label for="Keyword">Search:</label>
+                                    <input type="text" class="form-control" id="Keyword" name="Keyword" value="@ViewBag.Keyword">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <input type="hidden" name="pageSize" value="@ViewBag.PageSize" />
+                            <button type="submit" class="btn btn-dark">Search</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-lg-12">
+        <form method="post" action="@Url.Action("DeleteListBrand", "Brand", new { area = "admin" })">
+            <div class="card">
+                <div class="table-responsive">
+                    <div class="table-wrapper">
+                        <div class="table-title">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <h2>Manage Brand</h2>
+                                </div>
+                                <div class="col-sm-6">
+                                    @Html.ActionLink("Create new brand", "CreateBrand", "Brand", null, new { @class = "btn btn-dark" })
+                                    <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirmDelete();" />
+                                </div>
+                            </div>
+                        </div>
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <input type="checkbox" id="selectAll"><br><br>
+                                    </th>
+                                    <th>Id</th>
+                                    <th>Brand Name</th>
+                                    <th>Image</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var brand in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox" name="selectedIds" value="@brand.BrandId" class="checkBox" />
+                                            @Html.Hidden("brandIds", brand.BrandId)
+                                        </td>
+                                        <td>@brand.BrandId</td>
+                                        <td>@brand.BrandName</td>
+                                        <td>
+                                            @if (brand.LogoImage != null)
+                                            {
+                                                <img src="@Url.Content("~/"+brand.LogoImage)" alt="Brand Logo" class="resized-img">
+                                            }
+                                        </td>
+                                        <td class="button-td">
+                                            <div class="button-container">
+                                                <a href="/admin/Brand/UpdateBrand?id=@brand.BrandId"><input type="button" value="Edit" class="btn btn-dark" /></a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="ml-3">
+                                <label for="pageSizeDropdown">Records per page:</label>
+                                <select id="pageSizeDropdown" class="form-control" onchange="updatePageSize(this)">
+                                    @foreach (var size in ViewBag.PageSizeList)
+                                    {
+                                        var url = Url.Action("ListBrand", new { page = 1, pageSize = size, Keyword = ViewBag.Keyword });
+                                        <option value="@url" @(size == ViewBag.PageSize ? "selected='selected'" : "")>@size</option>
+                                    }
+                                </select>
+                                <script>
+                                    function updatePageSize(selectElement) {
+                                        location.href = selectElement.value;
+                                    }
+                                </script>
+                            </div>
+                            <div class="d-flex justify-content-center" style="margin-top: 20px">
+                                <nav aria-label="Page navigation text-center">
+                                    <ul class="pagination">
+                                        @if (ViewBag.PageNumber > 1)
+                                        {
+                                            <li class="page-item">
+                                                <a href="@Url.Action("ListBrand", new { page = 1, pageSize = ViewBag.PageSize, Keyword = ViewBag.Keyword})" class="page-link">Previous</a>
+                                            </li>
+                                        }
+
+                                        @for (int i = 1; i <= Math.Ceiling((decimal)ViewBag.TotalRecords / ViewBag.PageSize); i++)
+                                        {
+                                            <li class="page-item @(ViewBag.PageNumber == i ? "active" : "")">
+                                                <a href="@Url.Action("ListBrand", new { page = i, pageSize = ViewBag.PageSize, Keyword = ViewBag.Keyword})" class="page-link">@i</a>
+                                            </li>
+                                        }
+
+                                        @if (ViewBag.PageNumber < Math.Ceiling((decimal)ViewBag.TotalRecords / ViewBag.PageSize))
+                                        {
+                                            <li class="page-item">
+                                                <a href="@Url.Action("ListBrand", new { page = Math.Ceiling((decimal)ViewBag.TotalRecords / ViewBag.PageSize), pageSize = ViewBag.PageSize, Keyword = ViewBag.Keyword})" class="page-link">Next</a>
+                                            </li>
+                                        }
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </form>
+    </div>
+</div>
+<script>
+    var selectAllCheckbox = document.getElementById('selectAll');
+    var checkBoxes = document.querySelectorAll('.checkBox');
+
+    selectAllCheckbox.addEventListener('change', function () {
+        for (var i = 0; i < checkBoxes.length; i++) {
+            checkBoxes[i].checked = selectAllCheckbox.checked;
+        }
+    });
+
+
+    function confirmDelete() {
+        var checkBoxes = document.querySelectorAll('.checkBox');
+        var selectedCount = 0;
+
+        for (var i = 0; i < checkBoxes.length; i++) {
+            if (checkBoxes[i].checked) {
+                selectedCount++;
+            }
+        }
+
+        if (selectedCount > 0) {
+            return confirm('Are you sure you want to delete selected records?');
+        } else {
+            alert("Please select at least one item to delete!!!");
+            return false;
+        }
+    }
+</script>
+
+

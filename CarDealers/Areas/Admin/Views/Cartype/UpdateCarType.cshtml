@@ -1,0 +1,25 @@
+﻿@model CarDealers.Entity.CarType
+@{
+    ViewBag.Title = "Update Car Type";
+}
+<div class="content-wrap">
+    <div class="col-lg-12">
+        <div class="card">
+            @using (Html.BeginForm("UpdateCarType", "CarType", new { id = Model.CarTypeId }, FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TypeName)
+                    @Html.TextBoxFor(model => model.TypeName, new { @class = "form-control input-rounded" })
+                    <div style="color : red">
+                        @Html.ValidationMessageFor(x => x.TypeName)
+                    </div>
+                </div>
+                @Html.HiddenFor(model => model.CarTypeId)
+                <!-- Add form fields for other properties you want to edit -->
+
+                <button type="submit" class="btn btn-dark">Save Changes</button>
+            }
+        </div>
+    </div>
+</div>

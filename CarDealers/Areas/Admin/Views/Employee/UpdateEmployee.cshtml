@@ -1,0 +1,110 @@
+﻿@model CarDealers.Areas.Admin.Models.EmployeeViewModel.UpdateEmployeeViewModel
+@{
+    ViewBag.Title = "Update Employee";
+}
+<div class="content-wrap">
+    <!-- Include Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <!-- Include Flatpickr JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <div class="col-lg-12">
+        <div class="card">
+            @using (Html.BeginForm("UpdateEmployee", "Employee", Model, FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.FullName, "Full name")
+                    @Html.TextBoxFor(model => model.FullName, new { @class = "form-control input-rounded" })
+                    <div style="color : red">
+                        @Html.ValidationMessageFor(model => model.FullName)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Email)
+                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control input-rounded" })
+                    <div style="color : red">
+                        @Html.ValidationMessageFor(model => model.Email)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PhoneNumber, "Phone number")
+                    @Html.TextBoxFor(model => model.PhoneNumber, new { @class = "form-control input-rounded" })
+                    <div style="color : red">
+                        @Html.ValidationMessageFor(model => model.PhoneNumber)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Dob, "Date of Birth")
+                    <input type="text" id="Dob" asp-for="Dob" class="form-control input-rounded" name="Dob" value="@Model.Dob">
+                    <script>
+                        flatpickr("#Dob", {
+                            enableTime: false, // Enable time selection
+                            dateFormat: "d-m-Y", // Date and time format
+                            // Additional configuration options go here
+                        });
+                    </script>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.UserRoleId, "User role: ")
+                    @(Model.UserRoleId == ViewBag.RoleEmployeeId ? "Employee" : "Admin")
+                    <div style="color : red">
+                        @Html.ValidationMessageFor(model => model.UserRoleId)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Gender, "Gender:")
+                    <input type="radio" name="Gender" id="option1" value="true" @(Model.Gender == true ? "checked" : "")>
+                    <label style="margin-right: 10px;" for="option1">Male</label>
+
+                    <input type="radio" name="Gender" id="option2" value="false" @(Model.Gender == false ? "checked" : "")>
+                    <label for="option2">Female</label>
+
+                    <div style="color : red">
+                        @Html.ValidationMessageFor(model => model.Gender)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Status, "Status:")
+                    <input type="radio" name="Status" id="option1" value="1" @(Model.Status == 1 ? "checked" : "")>
+                    <label style="margin-right: 10px;" for="option1">Normal</label>
+
+                    <input type="radio" name="Status" id="option2" value="0" @(Model.Status == 0 ? "checked" : "")>
+                    <label for="option2">Lock</label>
+
+                    <div style="color : red">
+                        @Html.ValidationMessageFor(model => model.Status)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Address)
+                    @Html.TextBoxFor(model => model.Address, new { @class = "form-control input-rounded" })
+                    <div style="color : red">
+                        @Html.ValidationMessageFor(model => model.Address)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Username)
+                    @Html.TextBoxFor(model => model.Username, new { @class = "form-control input-rounded", @readonly = "readonly" })
+                    <div style="color : red">
+                        @Html.ValidationMessageFor(model => model.Username)
+                    </div>
+                </div>
+
+                @Html.HiddenFor(model => model.EmployeeId)
+                <!-- Add form fields for other properties you want to edit -->
+                <button type="submit" formaction="~/admin/Employee/ListEmployee" class="btn btn-danger custom-button">Cancel</button>
+                <button type="submit" class="btn btn-dark">Save Changes</button>
+            }
+        </div>
+    </div>
+</div>

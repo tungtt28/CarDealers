@@ -1,0 +1,118 @@
+﻿@model CarDealers.Areas.Admin.Models.OrderAccessoriesViewModel.ViewOrder
+@{
+
+}
+<style>
+	.button-container {
+		display: flex;
+		gap: 10px; /* Adjust the gap to set the space between links */
+		justify-content: center;
+	}
+
+	th, td {
+		text-align: center; /* Equal width for each column */
+		color: #000 !important;
+		padding: 8px !important;
+	}
+
+	.resized-img {
+		width: 100px; /* Set the desired width */
+		height: 100px; /* Set the desired height */
+	}
+
+	p {
+		color: #000;
+	}
+
+</style>
+
+<div class="content-wrap">
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+	<form method="post" action="@Url.Action("updateCart", "Cart")">
+		@Html.HiddenFor(model => model.OrderId)
+		<div class="col-lg-12">
+			<div class="card">
+				<div class="table-responsive">
+					<div class="table-wrapper">
+
+						<h2>Đã chọn mua</h2>
+						<table border="1">
+							<thead>
+								<tr>
+									<th>Sản phẩm</th>
+									<th>Giá</th>
+									<th>Số lượng</th>
+									<th>Thành tiền</th>
+								</tr>
+							</thead>
+							<tbody>
+								@for (var i = 0; i < Model.OrderAccessories.Count; i++)
+								{
+									var item = Model.OrderAccessories[i];
+									<tr>
+										<td>@item.Accessory.AccessoryName</td>
+										<td>@item.Accessory.ExportPrice</td>
+										<td>
+											<input type="number" name="OrderAccessories[@i].OrderAccessoryId" value="@item.OrderAccessoryId" style="display: none" />
+											<input type="number" name="OrderAccessories[@i].Quantity" value="@item.Quantity" />
+										</td>
+										<td>@item.TotalPrice</td>
+									</tr>
+								}
+							</tbody>
+						</table>
+
+						<p style="margin-top:6px;float:unset">Tổng tiền: <span id="grandTotal">@Model.totalPrice VNĐ</span></p>
+
+						<script>
+							$(document).ready(function () {
+								// Attach an event handler to all quantity input fields
+								$("input[name^='OrderAccessories'][name$='.Quantity']").on("input", function () {
+									// Calculate the total price for the corresponding row
+									var $row = $(this).closest("tr");
+									var exportPrice = parseFloat($row.find("td:eq(1)").text()); // Adjust the index to match your table structure
+									var quantity = parseFloat($(this).val());
+									var totalPrice = exportPrice * quantity;
+
+									// Update the total price cell in the same row
+									$row.find("td:eq(3)").text(totalPrice);
+
+									// Recalculate the grand total
+									updateGrandTotal();
+								});
+
+								function updateGrandTotal() {
+									var grandTotal = 0;
+									$("input[name^='OrderAccessories'][name$='.Quantity']").each(function () {
+										var $row = $(this).closest("tr");
+										var exportPrice = parseFloat($row.find("td:eq(1)").text()); // Adjust the index to match your table structure
+										var quantity = parseFloat($(this).val());
+										grandTotal += exportPrice * quantity;
+									});
+
+									// Update the grand total element
+									$("#grandTotal").text(grandTotal.toFixed(2) + " VNĐ");
+								}
+
+								// Initial calculation when the page loads
+								updateGrandTotal();
+							});
+						</script>
+
+
+						<div class="row">
+							<div class="col-lg-10">
+
+								<button type="submit" class="btn btn-dark custom-button">Cập nhật giỏ hàng</button>
+								<button type="submit" formaction="~/OrderAccessories/CreateOrderAccessories" class="btn btn-danger custom-button">Tiến hành thanh toán</button>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+
